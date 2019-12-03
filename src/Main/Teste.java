@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Map.Entry;
 
+import utils.Javatosql;
 import utils.Sqltojava;
 
 public class Teste {
@@ -19,6 +20,7 @@ public class Teste {
 	private final String pass = "qazwsx123";
 
 	public static void main(String[] args) throws SQLException {
+		Javatosql j2s = new Javatosql();
 		Teste t = new Teste();
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -27,14 +29,14 @@ public class Teste {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		int value = t.insertPessoa(123654987, 27, "Miguel", "Silva", "Valpaços");
-		if(value == 0) {
-			System.out.println("Entrada duplicada");
-		}else {
-			System.out.println("Nova entrada introduzida com sucesso");
-		}
-		ResultSet r = t.getTable("Pessoa");
+		
+		Javatosql.printForeignKeys(con, "Utente");
+		int v = j2s.insertToEspecialidade(con, "Cardiologista");
+		int value = j2s.insertToMedico(con, 123456789, 1500, "Cardiologista");
+		
+		System.out.println(v);
+		System.out.println(value);
+		ResultSet r = t.getTable("Medico");
 		ResultSetMetaData rsmd = r.getMetaData();
 
 		
