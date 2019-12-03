@@ -1,17 +1,20 @@
 package Main;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.util.List;
 import java.util.Map.Entry;
 
 import utils.Javatosql;
 import utils.Sqltojava;
+import utils.databaseAcess;
 
 public class Teste {
 
@@ -20,23 +23,25 @@ public class Teste {
 	private final String pass = "qazwsx123";
 
 	public static void main(String[] args) throws SQLException {
-		Javatosql j2s = new Javatosql();
 		Teste t = new Teste();
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Clinica?useTimezone=true&serverTimezone=UTC",
-					"root", "qazwsx123");
+					databaseAcess.USER, databaseAcess.PASS);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		int g = Javatosql.insertToEspecialidade(con, "Cardiologia");
+		int p = Javatosql.insertToPessoa(con, 123456789, 49, "Shun", "Wang", "teste");
+		int p1 = Javatosql.insertToPessoa(con, 987654321, 49, "Arman", "Freitas", "teste");
 		
-		Javatosql.printForeignKeys(con, "Utente");
-		int v = j2s.insertToEspecialidade(con, "Cardiologista");
-		int value = j2s.insertToMedico(con, 123456789, 1500, "Cardiologista");
+		int user = Javatosql.insertToUtente(con, 123456789);
+		int medic = Javatosql.insertToMedico(con, 987654321, 1500, "Cardiologia");
 		
+		int v = Javatosql.insertToConsulta(con, new Date(System.currentTimeMillis()), new Time(155251), "Cardiologia", 123456789
+				,987654321);
 		System.out.println(v);
-		System.out.println(value);
-		ResultSet r = t.getTable("Medico");
+		ResultSet r = t.getTable("Consulta");
 		ResultSetMetaData rsmd = r.getMetaData();
 
 		
