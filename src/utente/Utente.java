@@ -28,7 +28,7 @@ public class Utente {
 	}
 	
 	public void cancelarConsulta(int idConsulta, int nif) {
-		Javatosql.remove
+		
 	}
 	
 	public void remarcarConsulta() {

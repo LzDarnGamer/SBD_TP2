@@ -1,10 +1,12 @@
 package utils;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.AbstractMap;
@@ -67,7 +69,7 @@ public class Sqltojava {
         }
     }
 
-    public static List<Sqltojava> formTable(ResultSet rs)
+    private static List<Sqltojava> formTable(ResultSet rs)
             throws SQLException {
     	
     	List<Sqltojava> table = new ArrayList<Sqltojava>();
@@ -94,7 +96,20 @@ public class Sqltojava {
         } catch (SQLException e) {
             throw e;
         }
-        
         return table;
     }
+    
+	public static List<Sqltojava> getTable(Connection con, String name) {
+		ResultSet rs;
+		List<Sqltojava> list = null;
+		try {
+			Statement stmt = con.createStatement();
+			rs = stmt.executeQuery("select * from " + name);
+			list = formTable(rs);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 }

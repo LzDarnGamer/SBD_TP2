@@ -71,7 +71,7 @@
 	<script type="text/javascript">
 	document.getElementById('lg').onclick = function() {
 		<%
-		String permissao = Login.Entrar("AAA", "asd");
+		boolean permissao = Login.Entrar("AAA", "asd");
 		//String ajuda = "Ola mundo";
 		//boolean ajuda = true;
 		if (permissao) { %>

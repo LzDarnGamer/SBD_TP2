@@ -1,14 +1,9 @@
 package Main;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Time;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -19,8 +14,7 @@ import utils.databaseAcess;
 public class Teste {
 
 	private static Connection con;
-
-	public static void main(String[] args) throws SQLException {
+	public Teste() {
 		Teste t = new Teste();
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -29,7 +23,14 @@ public class Teste {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		int g = Javatosql.insertToEspecialidade(con, "Cardiologia");
+	}
+	
+	public static void main(String[] args) throws SQLException {
+
+		Javatosql.insertToEspecialidade(con, "Clinica Geral");
+		Javatosql.insertToEspecialidade(con, "Gastroentrologia");
+		Javatosql.insertToEspecialidade(con, "Otorrino");
+		
 //		int is = Javatosql.removeEspecialidade(con, "Cardiologia");
 //		int p = Javatosql.insertToPessoa(con, 123456789, 49, "Shun", "Wang", "teste");
 //		int p1 = Javatosql.insertToPessoa(con, 987654321, 49, "Arman", "Freitas", "teste");
@@ -37,18 +38,17 @@ public class Teste {
 //		int user = Javatosql.insertToUtente(con, 123456789);
 //		int medic = Javatosql.insertToMedico(con, 987654321, 1500, "Cardiologia");
 		
-		ResultSet r = t.getTable("Especialidade");
-		ResultSetMetaData rsmd = r.getMetaData();
+		
 
 		
-		
-		List<Sqltojava> list = Sqltojava.formTable(r);
+		List<Sqltojava> list = Sqltojava.getTable(con, "Especialidade");
+		StringBuilder s = new StringBuilder();
 		for (Sqltojava i : list) {
 			for (Entry<Object, Class> col : i.row) {
-				System.out.println(" > " + ((col.getValue()).cast(col.getKey())));
+				s.append(String.valueOf((col.getValue()).cast(col.getKey())) + "\n");
 			}
-			System.out.println();
 		}
+		System.out.println(s.toString());
 
 	}
 
@@ -71,17 +71,6 @@ public class Teste {
 
 	}
 
-	public ResultSet getTable(String name) {
-		Statement stmt;
-		ResultSet rs = null;
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("select * from " + name);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return rs;
-	}
 
 }
