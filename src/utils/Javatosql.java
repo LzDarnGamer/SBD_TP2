@@ -160,17 +160,18 @@ public class Javatosql {
 		return 0;
 	}
 	
-//	public static int removeConsulta(Connection con, String idConsulta) {
+//	public static int removeConsulta(Connection con, String especialidade, Date data, Time time) {
 //		PreparedStatement st;
 //		try {
 //			st = con.prepareStatement("DELETE FROM Especialidade WHERE nome = ?");
-//			st.setString(1,nomeEspecialidade);
+//			st.setInt(1, especialidade);
 //			return st.executeUpdate();
 //		} catch (SQLException e) {
 //			System.out.println(e);
 //		}
 //		return 0;
 //	}
+	
 //	public static int removeMancha(Connection con, String nome) {
 //		PreparedStatement st;
 //		try {

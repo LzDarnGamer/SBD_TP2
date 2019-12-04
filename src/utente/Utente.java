@@ -27,8 +27,8 @@ public class Utente {
 		return Javatosql.insertToConsulta(con, data, hora, especialidade, nif, nif_medico);
 	}
 	
-	public void cancelarConsulta(Date data, Time hora, String especialidade) {
-		
+	public void cancelarConsulta(int idConsulta, int nif) {
+		Javatosql.remove
 	}
 	
 	public void remarcarConsulta() {
