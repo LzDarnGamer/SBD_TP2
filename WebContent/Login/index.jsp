@@ -1,3 +1,8 @@
+<%@ page 
+	import="java.util.List"
+	import="Main.Login"
+	%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,23 +47,17 @@
 
 					<div class="wrap-input100 validate-input m-t-85 m-b-35" data-validate = "Enter username">
 						<input class="input100" type="text" name="username">
-						<span class="focus-input100" data-placeholder="Username"></span>
+						<span class="focus-input100" data-placeholder="Nif"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input m-b-50" data-validate="Enter password">
 						<input class="input100" type="password" name="pass">
-						<span class="focus-input100" data-placeholder="Password"></span>
+						<span class="focus-input100" data-placeholder="Palavra-passe"></span>
 					</div>
 
 					<div class="container-login100-form-btn">
 						<button class="login100-form-btn" name="login" id="lg">
 							Entrar
-						</button>
-					</div>
-
-					<div class="container-login100-form-btn">
-						<button class="login100-form-btn">
-							Registar
 						</button>
 					</div>
 
@@ -72,10 +71,19 @@
 	<script type="text/javascript">
 	document.getElementById('lg').onclick = function() {
 		<%
-		String x = request.getParameter("username");
-		//out.write(x);
+		String permissao = Login.Entrar("AAA", "asd");
+		//String ajuda = "Ola mundo";
+		//boolean ajuda = true;
+		if (permissao) { %>
+		alert("Funciona")
+		<%
+		} else {
 		%>
-		alert("${x}");
+		alert("Nao Funciona")
+		<%
+		}%>
+		
+		
 	}
 	
 	</script>
