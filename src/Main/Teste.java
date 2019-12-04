@@ -19,8 +19,6 @@ import utils.databaseAcess;
 public class Teste {
 
 	private static Connection con;
-	private final String user = "root";
-	private final String pass = "qazwsx123";
 
 	public static void main(String[] args) throws SQLException {
 		Teste t = new Teste();
@@ -32,16 +30,14 @@ public class Teste {
 			e.printStackTrace();
 		}
 		int g = Javatosql.insertToEspecialidade(con, "Cardiologia");
-		int p = Javatosql.insertToPessoa(con, 123456789, 49, "Shun", "Wang", "teste");
-		int p1 = Javatosql.insertToPessoa(con, 987654321, 49, "Arman", "Freitas", "teste");
+//		int is = Javatosql.removeEspecialidade(con, "Cardiologia");
+//		int p = Javatosql.insertToPessoa(con, 123456789, 49, "Shun", "Wang", "teste");
+//		int p1 = Javatosql.insertToPessoa(con, 987654321, 49, "Arman", "Freitas", "teste");
+//		
+//		int user = Javatosql.insertToUtente(con, 123456789);
+//		int medic = Javatosql.insertToMedico(con, 987654321, 1500, "Cardiologia");
 		
-		int user = Javatosql.insertToUtente(con, 123456789);
-		int medic = Javatosql.insertToMedico(con, 987654321, 1500, "Cardiologia");
-		
-		int v = Javatosql.insertToConsulta(con, new Date(System.currentTimeMillis()), new Time(155251), "Cardiologia", 123456789
-				,987654321);
-		System.out.println(v);
-		ResultSet r = t.getTable("Consulta");
+		ResultSet r = t.getTable("Especialidade");
 		ResultSetMetaData rsmd = r.getMetaData();
 
 		

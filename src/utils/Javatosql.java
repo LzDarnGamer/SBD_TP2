@@ -111,6 +111,78 @@ public class Javatosql {
 		}
 		return 0;
 	}
+	
+	public static int removeEspecialidade(Connection con, String nomeEspecialidade) {
+		PreparedStatement st;
+		try {
+			st = con.prepareStatement("DELETE FROM Especialidade WHERE nome = ?");
+			st.setString(1,nomeEspecialidade);
+			return st.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return 0;
+	}
+	
+	public static int removeUtente(Connection con, int nif) {
+		PreparedStatement st;
+		try {
+			st = con.prepareStatement("DELETE FROM Utente WHERE nif = ?");
+			st.setInt(1,nif);
+			return st.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return 0;
+	}
+	
+	public static int removePessoa(Connection con, int nif) {
+		PreparedStatement st;
+		try {
+			st = con.prepareStatement("DELETE FROM Pessoa WHERE nif = ?");
+			st.setInt(1,nif);
+			return st.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return 0;
+	}
+	
+	public static int removeMedico(Connection con, int nif) {
+		PreparedStatement st;
+		try {
+			st = con.prepareStatement("DELETE FROM Medico WHERE nif = ?");
+			st.setInt(1,nif);
+			return st.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return 0;
+	}
+	
+//	public static int removeConsulta(Connection con, String idConsulta) {
+//		PreparedStatement st;
+//		try {
+//			st = con.prepareStatement("DELETE FROM Especialidade WHERE nome = ?");
+//			st.setString(1,nomeEspecialidade);
+//			return st.executeUpdate();
+//		} catch (SQLException e) {
+//			System.out.println(e);
+//		}
+//		return 0;
+//	}
+//	public static int removeMancha(Connection con, String nome) {
+//		PreparedStatement st;
+//		try {
+//			st = con.prepareStatement("DELETE FROM Especialidade WHERE nome = ?");
+//			st.setString(1,nomeEspecialidade);
+//			return st.executeUpdate();
+//		} catch (SQLException e) {
+//			System.out.println(e);
+//		}
+//		return 0;
+//	}
+	
 	public static void printForeignKeys(Connection connection, String tableName) throws SQLException {
 
 	}

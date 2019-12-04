@@ -1,8 +1,11 @@
 package utente;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.Time;
 
+import utils.Javatosql;
 import utils.databaseAcess;
 
 public class Utente {
@@ -20,11 +23,11 @@ public class Utente {
 		}
 	}
 	
-	public void marcarConsulta() {
-		
+	public int marcarConsulta(Date data, Time hora, String especialidade, int nif_medico) {
+		return Javatosql.insertToConsulta(con, data, hora, especialidade, nif, nif_medico);
 	}
 	
-	public void cancelarConsulta() {
+	public void cancelarConsulta(Date data, Time hora, String especialidade) {
 		
 	}
 	
