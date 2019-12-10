@@ -110,8 +110,8 @@ public class Teste {
 
 //		admin.listarEspecialidadeStatus(init, fim, "Cardiologia", "Remarcacoes");
 		
-		admin.listarMedicoTempoPerdido(987654321);
-		System.out.println(utils.multiply30by(10));
+		admin.listarMedicoTempoPerdido(init, fim, 987654321);
+
 	}
 
 }

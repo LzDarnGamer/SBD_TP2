@@ -3,13 +3,11 @@ package admin;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 
+import Main.main;
 import utils.Javatosql;
 import utils.databaseAcess;
 import utils.utils;
@@ -47,7 +45,7 @@ public class Admin {
 	}
 
 	public String[] listarMedicos(String nome_especialidade) {
-		return Javatosql.listarMedicos(con, nome_especialidade);
+		return Javatosql.listarMedicosbyEsp(con, nome_especialidade);
 	}
 
 	public List<String> listarEspecialidadeStatus(Date init, Date fim, String nome_especialidade, String status) {
@@ -65,7 +63,7 @@ public class Admin {
 			if (utils.testDataBetween(init, fim, date))
 				lista.add(resultado[i]);
 		}
-		System.out.println(Arrays.toString(lista.toArray()));
+
 		return lista;
 	}
 
@@ -112,8 +110,17 @@ public class Admin {
 		return output;
 	}
 
-	public void listarMedicoTempoPerdido(int nif_medico) {
-		int v = Javatosql.listarTempoPerdido(con, nif_medico);
-		System.out.println(v);
+	public Integer[] getListaMedicos() {
+		return Javatosql.listarMedicos(con);
+	}
+	
+	public String listarMedicoTempoPerdido(Date init, Date fim, int nif_medico) {
+		int value = Javatosql.listarTempoPerdido(con, nif_medico, init, fim);
+		return utils.multiply30by(value).toString();
+	}
+	
+	
+	public Connection getCon() {
+		return con;
 	}
 }

@@ -1,9 +1,11 @@
+<%@page import="admin.Admin"%>
 <%@ page import="java.util.List" import="Main.Login"
 	import="java.sql.Connection" import="java.sql.DriverManager"
 	import="java.sql.PreparedStatement" import="java.sql.SQLException"
 	import="java.sql.*"%>
 <%
-	Login l = new Login();
+	Admin admin = new Admin();
+	session.setAttribute("admin", admin);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +22,6 @@
 <link rel="stylesheet" type="text/css" href="../css/main.css">
 <!--===============================================================================================-->
 </head>
-
 <body style="background-image: url('../images/back.jpg');">
 
 	<div class="limiter">

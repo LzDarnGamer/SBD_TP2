@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class Javatosql {
 			+ "nif_utente, nif_medico, horaInicio, horaFim, dataConsulta, nome_Especialidade)" + "values(?,?,?,?,?,?)";
 
 	private static final String cancelamentoQuery = "insert into Cancelamento()";
+
 	public static int insertToPessoa(Connection con, int nif, int idade, String sexo, String nome, String apelido,
 			String morada) {
 		PreparedStatement preparedStmt;
@@ -201,7 +203,7 @@ public class Javatosql {
 		}
 		return 0;
 	}
-	
+
 	public static int insertCancelamento(Connection con) {
 		try {
 			PreparedStatement st;
@@ -355,6 +357,7 @@ public class Javatosql {
 		}
 		return null;
 	}
+
 	public static int getIDconsulta(Connection con, Date data, Time hora, String nome_especialidade, int nif_medico) {
 		String queryCheck = "SELECT Consulta.idConsulta FROM Consulta WHERE dataConsulta = ?" + "AND hora = ?"
 				+ "AND nome_especialidade = ?" + "AND nif_medico = ?";
@@ -415,7 +418,7 @@ public class Javatosql {
 
 	}
 
-	public static String[] listarMedicos(Connection con, String nome_especialidade) {
+	public static String[] listarMedicosbyEsp(Connection con, String nome_especialidade) {
 		try {
 			String queryCheck = "SELECT Pessoa.nome,Pessoa.apelido,Pessoa.nif,Pessoa.idade "
 					+ "FROM ((Medico INNER JOIN Especialidade ON Medico.nome_especialidade = Especialidade.nome)"
@@ -431,11 +434,29 @@ public class Javatosql {
 		}
 		return null;
 	}
-	
+
+	public static String[] listarMedicosbyNif(Connection con, int nif_medico) {
+		try {
+			String queryCheck = "SELECT Pessoa.nif,Pessoa.nome,Pessoa.apelido,Pessoa.idade "
+					+ "FROM ((Medico INNER JOIN Especialidade ON Medico.nome_especialidade = Especialidade.nome)"
+					+ "INNER JOIN Pessoa ON Medico.nif = Pessoa.nif)" + "WHERE (Medico.nif_medico = ?)";
+			PreparedStatement ps = con.prepareStatement(queryCheck);
+			ps.setInt(1, nif_medico);
+			ResultSet rs = ps.executeQuery();
+			List<String> list = new ArrayList<String>();
+			while (rs.next()) {
+				list.add(rs.getInt(1) + "=" + rs.getString(2) + "=" + rs.getString(3) + "=" + rs.getInt(4));
+			}
+			return list.toArray(new String[list.size()]);
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return null;
+	}
+
 	public static String[] listarTabelaStatus(Connection con, String tipo) {
 		try {
-			String query = "SELECT E.nif_utente, E.horaInicio, E.dataConsulta"
-					+ " FROM " + tipo + " E";
+			String query = "SELECT E.nif_utente, E.horaInicio, E.dataConsulta" + " FROM " + tipo + " E";
 			PreparedStatement ps = con.prepareStatement(query);
 			ResultSet resultSet = ps.executeQuery();
 			List<Sqltojava> list = Sqltojava.formTable(resultSet);
@@ -445,7 +466,7 @@ public class Javatosql {
 		}
 		return null;
 	}
-	
+
 	public static String listarStatusUtente(Connection con, String tipo) {
 		try {
 			String query = "SELECT " + tipo + ".nif_utente FROM " + tipo;
@@ -458,8 +479,6 @@ public class Javatosql {
 		}
 		return null;
 	}
-
-
 
 	public static Date dateFormater(int year, int month, int day) {
 		Calendar cal = Calendar.getInstance();
@@ -493,6 +512,7 @@ public class Javatosql {
 		}
 		return new Time(ms);
 	}
+
 	public static String getSex(Connection con, int nif) {
 		String queryCheck = "SELECT Pessoa.sexo FROM Pessoa WHERE nif = ?";
 		try {
@@ -539,7 +559,6 @@ public class Javatosql {
 		return null;
 	}
 
-
 	public static String[] procurarUtentes(Connection con) {
 		try {
 			String query = "SELECT Pessoa.nif,Pessoa.idade,Pessoa.sexo,Pessoa.nome,Pessoa.apelido,Pessoa.morada"
@@ -563,6 +582,22 @@ public class Javatosql {
 			List<Sqltojava> list = Sqltojava.formTable(resultSet);
 			String s = Sqltojava.getList(con, list);
 			return s.split("\n");
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return null;
+	}
+
+	public static Integer[] listarMedicos(Connection con) {
+		try {
+			String query = "SELECT Medico.nif FROM Medico";
+			PreparedStatement ps = con.prepareStatement(query);
+			ResultSet rs = ps.executeQuery();
+			List<Integer> list = new ArrayList<Integer>();
+			while (rs.next()) {
+				list.add(rs.getInt(1));
+			}
+			return list.toArray(new Integer[list.size()]);
 		} catch (SQLException e) {
 			System.out.println(e);
 		}
@@ -601,16 +636,21 @@ public class Javatosql {
 		return null;
 	}
 
-	
-	public static int listarTempoPerdido(Connection con, int nif_medico) {
+	public static int listarTempoPerdido(Connection con, int nif_medico, Date init, Date fim) {
 		try {
-			String query = "SELECT COUNT(*),(SELECT COUNT(*) FROM Falta WHERE (Falta.nif_medico = ?) ) "
-					+ "FROM Cancelamento WHERE (Cancelamento.nif_medico = ?)" ;
+			String query = "SELECT COUNT(*),(SELECT COUNT(*) FROM Falta WHERE (Falta.nif_medico = ?"
+					+ " and Falta.dataConsulta between ? and ? ))"
+					+ "FROM Cancelamento WHERE (Cancelamento.nif_medico = ?"
+					+ " and Cancelamento.dataConsulta between ? and ?)";
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setInt(1, nif_medico);
-			ps.setInt(2, nif_medico);
+			ps.setDate(2, init);
+			ps.setDate(3, fim);
+			ps.setInt(4, nif_medico);
+			ps.setDate(5, init);
+			ps.setDate(6, fim);
 			ResultSet resultSet = ps.executeQuery();
-			if(resultSet.next()) {
+			if (resultSet.next()) {
 				return resultSet.getInt(1) + resultSet.getInt(2);
 			}
 		} catch (SQLException e) {

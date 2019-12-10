@@ -56,7 +56,7 @@ public class utils {
 		Calendar c = Calendar.getInstance();
 		c.setTime(t);
 		if(times==0) {
-			Javatosql.timeFormater("0","0");
+			return Javatosql.timeFormater("0","0");
 		}
 		while(times>1) {
 			c.add(Calendar.MINUTE, 30);
