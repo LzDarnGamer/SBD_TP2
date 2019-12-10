@@ -69,7 +69,7 @@ public class Sqltojava {
         }
     }
 
-    private static List<Sqltojava> formTable(ResultSet rs)
+    public static List<Sqltojava> formTable(ResultSet rs)
             throws SQLException {
     	
     	List<Sqltojava> table = new ArrayList<Sqltojava>();
@@ -99,17 +99,35 @@ public class Sqltojava {
         return table;
     }
     
-	public static List<Sqltojava> getTable(Connection con, String name) {
+	public static String getList(Connection con, String name) {
 		ResultSet rs;
 		List<Sqltojava> list = null;
+		StringBuilder s = new StringBuilder();
 		try {
 			Statement stmt = con.createStatement();
 			rs = stmt.executeQuery("select * from " + name);
 			list = formTable(rs);
+			for (Sqltojava i : list) {
+				for (Entry<Object, Class> col : i.row) {
+					s.append(String.valueOf((col.getValue()).cast(col.getKey())) + " ");
+				}
+				s.append("\n");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return list;
+
+		return s.toString();
 	}
 	
+	public static String getList(Connection con, List<Sqltojava> list) {
+		StringBuilder s = new StringBuilder();
+		for (Sqltojava i : list) {
+			for (Entry<Object, Class> col : i.row) {
+				s.append(String.valueOf((col.getValue()).cast(col.getKey())) + " ");
+			}
+			s.append("\n");
+		}
+		return s.toString();
+	}
 }

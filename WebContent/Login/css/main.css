@@ -31,6 +31,8 @@
 /*//////////////////////////////////////////////////////////////////
 [ RESTYLE TAG ]*/
 
+
+
 * {
 	margin: 0px; 
 	padding: 0px; 
@@ -42,6 +44,11 @@ body, html {
 	font-family: Poppins-Regular, sans-serif;
 }
 
+body {
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
 /*---------------------------------------------*/
 a {
 	font-family: Poppins-Regular;
@@ -170,12 +177,11 @@ iframe {
   justify-content: center;
   align-items: center;
   padding: 15px;
-  background: #fff;  
 }
 
 .wrap-login100 {
   width: 390px;
-  background: #fff;
+
 }
 
 
@@ -202,6 +208,7 @@ iframe {
   border-radius: 50%;
   overflow: hidden;
   margin: 0 auto;
+  border: 6px solid #000000;
 }
 
 .login100-form-avatar img {
