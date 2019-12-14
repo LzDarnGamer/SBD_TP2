@@ -1,5 +1,7 @@
 package admin;
 
+import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -7,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import Main.main;
 import utils.Javatosql;
 import utils.databaseAcess;
 import utils.utils;
@@ -27,22 +28,38 @@ public class Admin {
 	}
 
 	public void createMedico(int nif, String sexo, int idade, String nome, String apelido, String morada,
-			int vencimento, String especialidade) {
-		if (Javatosql.insertToPessoa(con, nif, idade, sexo, nome, apelido, morada) == 1) {
+			int vencimento, String especialidade, InputStream image) {
+		if (Javatosql.insertToPessoa(con, nif, idade, sexo, nome, apelido, morada, image) == 1) {
 			Javatosql.insertToMedico(con, nif, vencimento, especialidade);
 		}
 
 	}
-
-	public void createUtente(int nif, String sexo, int idade, String nome, String apelido, String morada) {
-		if (Javatosql.insertToPessoa(con, nif, idade, sexo, nome, apelido, morada) == 1) {
+	
+	public void createUtente(int nif, String sexo, int idade, String nome, String apelido, String morada, 
+			InputStream image) {
+		if (Javatosql.insertToPessoa(con, nif, idade, sexo, nome, apelido, morada, image) == 1) {
 			Javatosql.insertToUtente(con, nif);
 		}
 	}
+	
+	public void updateUtente(int nif, String sexo, int idade, String nome, String apelido, String morada, 
+			String file) {
+		Javatosql.updateUtente(con, nif, sexo, idade, nome, apelido, morada, utils.Base64Decoder(file));
+	}
+	public void updateUtente(int nif, String sexo, int idade, String nome, String apelido, String morada, 
+			InputStream file) {
+		Javatosql.updateUtente(con, nif, sexo, idade, nome, apelido, morada, file);
+	}
 
-	public String[] procurarUtente() {
+	public String[] listarUtenteNome() {
+
+		return Javatosql.listarUtenteNome(con);
+	}
+	public String[] listarUtente() {
 		return Javatosql.procurarUtentes(con);
 	}
+	
+	
 
 	public String[] listarMedicos(String nome_especialidade) {
 		return Javatosql.listarMedicosbyEsp(con, nome_especialidade);
@@ -109,7 +126,11 @@ public class Admin {
 
 		return output;
 	}
-
+	
+	public String[] getListaEspecialidades() {
+		return Javatosql.listarEspecialidades(con);
+	}
+	
 	public Integer[] getListaMedicos() {
 		return Javatosql.listarMedicos(con);
 	}

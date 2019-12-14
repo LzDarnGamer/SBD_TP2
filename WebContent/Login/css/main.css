@@ -40,7 +40,6 @@
 }
 
 body, html {
-	height: 100%;
 	font-family: Poppins-Regular, sans-serif;
 }
 
@@ -184,6 +183,15 @@ iframe {
 
 }
 
+#myButton {
+
+    padding: 30px;
+    display:block;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+}
 
 /*------------------------------------------------------------------
 [ Form ]*/
@@ -453,4 +461,31 @@ iframe {
   -o-transform: translateY(-50%);
   transform: translateY(-50%);
   left: 0;
+}
+
+
+/*//////////////////////////////////////////////////////////////////
+[ Table more ]*/
+#customers {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  background-color: white;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
 }

@@ -1,4 +1,5 @@
-<%@ page import="java.util.List" import="Main.Login"
+<%@ page import="java.util.List"
+import="Main.Login"
 import="java.sql.Connection"
 import="java.sql.DriverManager"
 import="java.sql.PreparedStatement"
@@ -48,7 +49,7 @@ import="java.sql.*"
 		<div class="container-login100">
 			<div class="wrap-login100 p-t-85 p-b-20">
 				<form class="login100-form validate-form">
-					<span class="login100-form-title p-b-70"> Bem vindo </span> <span
+					<span class="login100-form-title p-b-70"> ISEL Care </span> <span
 						class="login100-form-avatar"> <img
 						src="images/avatar-01.jpg" alt="AVATAR">
 					</span>
@@ -59,11 +60,6 @@ import="java.sql.*"
 							class="focus-input100" data-placeholder="Nif"></span>
 					</div>
 
-					<div class="wrap-input100 validate-input m-b-50"
-						data-validate="Enter password">
-						<input class="input100" type="password" name="pass"> <span
-							class="focus-input100" data-placeholder="Palavra-passe"></span>
-					</div>
 
 					<div class="container-login100-form-btn">
 						<button class="login100-form-btn" name="login" id="lg">
@@ -78,7 +74,9 @@ import="java.sql.*"
 	<%
 		String entrarBtn = request.getParameter("login");
 		if (entrarBtn != null) {
-			int nif = 123465789;
+			String ajuda = request.getParameter("username");
+			int nif = Integer.parseInt(ajuda);
+			session.setAttribute("nif", String.valueOf(nif));
 			String permissao = l.Entrar(nif);
 			if (permissao != null) {
 				response.sendRedirect(permissao);

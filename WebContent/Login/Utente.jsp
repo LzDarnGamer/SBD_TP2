@@ -1,4 +1,24 @@
+<%@ page import="java.util.List"
+import="Main.Login"
+import="java.sql.Connection"
+import="java.sql.DriverManager"
+import="java.sql.PreparedStatement"
+import="java.sql.SQLException"
+import="java.sql.*"
+import="utente.Utente"
+import="utils.Javatosql"
+%>
+
+<%
+String n = (String)session.getAttribute("nif");
+int nif = Integer.parseInt(n);
+Utente pessoa = new Utente (nif);
+session.setAttribute("utente", pessoa);
+%>
+
 <!DOCTYPE html>
+
+
 <html>
     <head>
         <title>ISEL Clinic</title>
@@ -35,11 +55,11 @@
                         <div class="wrap-login100 p-t-85 p-b-20">
                             <form class="login100-form validate-form">
                                 <span class="login100-form-title p-b-70">
-                                    Utente
+                                    Bem-vind<%if (Javatosql.getSex(pessoa.getCon(), nif).equals("m")) {%>o<%} else {%>a<%}%> <%=Javatosql.nomePessoa(pessoa.getCon(), nif)%>
                                 </span>
             
                                 <div class="container-login100-form-btn">
-                                    <button class="login100-form-btn">
+                                    <button class="login100-form-btn" name="marcarConsulta">
                                         Marcar consulta
                                     </button>
                                 </div>
@@ -57,7 +77,7 @@
                                 </div>
 
                                 <div class="container-login100-form-btn">
-                                    <button class="login100-form-btn">
+                                    <button class="login100-form-btn" name="listarConsulta">
                                         Listar consultas Marcadas
                                     </button>
                                 </div>
@@ -68,6 +88,18 @@
                 </div>
 
     </body>
+    
+    <%
+    String marcarBtn = request.getParameter("marcarConsulta");
+    if (marcarBtn != null) {
+    	response.sendRedirect("MarcarConsulta.jsp");
+    }
+    
+    String listarBtn = request.getParameter("listarConsulta");
+    if (listarBtn != null) {
+    	response.sendRedirect("ListarConsultas.jsp");
+    }
+    %>
 
 
 </html>

@@ -33,13 +33,12 @@
 						src="../images/admin_icon.png" alt="AVATAR">
 					</span>
 				</form>
-				<br>
-				<form id="formEsp" method="POST">
-					<button class="login100-form-btn" name="OKesp">Gerir Utente</button>
+				<form id="formEsp" method="POST" action="criar_Utente/Admin_Utente.jsp">
+					<button class="login100-form-btn" name="gerirUtente">Gerir Utente</button>
 				</form>
 				<br>
-				<form id="formEsp" method="POST">
-					<button class="login100-form-btn" name="OKesp">Procurar fichas de utentes</button>
+				<form id="formEsp" method="POST" action="ListarUtentesAutoComplete.jsp">
+					<button class="login100-form-btn" name="listarUtentesAutoComplete">Procurar fichas de utentes</button>
 				</form>
 				<br>
 				<form id="formEsp" method="POST">
@@ -50,16 +49,16 @@
 					<button class="login100-form-btn" name="OKesp">Exportar/Importar fichas</button>
 				</form>
 				<br>
-				<form id="formEsp" method="POST">
-					<button class="login100-form-btn" name="OKesp">Listar total de médicos</button>
+				<form id="formEsp" method="POST" action="ListarEspecialidades.jsp">
+					<button class="login100-form-btn" name="listMedicosEsp">Listar total de médicos</button>
 				</form>
 				<br>
-				<form id="formEsp" method="POST">
-					<button class="login100-form-btn" name="OKesp">Listar estados das consultas por Especialidade</button>
+				<form id="formEsp" method="POST" action="ListarEspecialidadeStatus.jsp">
+					<button class="login100-form-btn" name="listEspStats">Listar estados das consultas por Especialidade</button>
 				</form>
 				<br>
-				<form id="formEsp" method="POST">
-					<button class="login100-form-btn" name="OKesp">Listar faltas de utentes</button>
+				<form id="formEsp" method="POST" action="ListarUtentesFaltas.jsp">
+					<button class="login100-form-btn" name="listFaltas">Listar faltas de utentes</button>
 				</form>
 				<br>
 				<form id="formPerdidas" method="POST" action="ListarHorasPerdidas.jsp">

@@ -1,5 +1,7 @@
 package utils;
 
+import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -14,15 +16,15 @@ import java.util.List;
 
 public class Javatosql {
 
-	private static final String pessoaQuery = "insert into Pessoa (nif, idade,sexo, nome, apelido, morada)"
-			+ " values (?, ?, ?, ?, ?, ?)";
+	private static final String pessoaQuery = "insert into Pessoa (nif, idade,sexo, nome, apelido, morada, image)"
+			+ " values (?, ?, ?, ?, ?, ?, ?)";
 
 	private static final String medicoQuery = "insert into Medico (nif, vencimento, nome_especialidade)"
 			+ "values(?,?,?)";
 
 	private static final String utenteQuery = "insert into Utente (nif)" + "values(?)";
 
-	private static final String consultaQuery = "insert into Consulta (dataConsulta, hora, "
+	private static final String consultaQuery = "insert into Consulta (dataConsulta, horaInicio, "
 			+ "nome_especialidade, nif_utente, nif_medico)" + "values(?,?,?,?,?)";
 
 	private static final String especialidadeQuery = "insert into Especialidade (nome)" + "values(?)";
@@ -42,7 +44,7 @@ public class Javatosql {
 	private static final String cancelamentoQuery = "insert into Cancelamento()";
 
 	public static int insertToPessoa(Connection con, int nif, int idade, String sexo, String nome, String apelido,
-			String morada) {
+			String morada, InputStream image) {
 		PreparedStatement preparedStmt;
 		try {
 			preparedStmt = con.prepareStatement(pessoaQuery);
@@ -52,13 +54,61 @@ public class Javatosql {
 			preparedStmt.setString(4, nome);
 			preparedStmt.setString(5, apelido);
 			preparedStmt.setString(6, morada);
+			preparedStmt.setBlob(7, image);
 			return preparedStmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e);
 		}
 		return 0;
 	}
-
+	public static int updateUtente(Connection con, int nif, String sexo, int idade, String nome, String apelido,
+			String morada, InputStream file) {
+		PreparedStatement preparedStmt;
+		String query = "UPDATE Pessoa " + 
+				"SET nif = ? , idade = ?, nome = ?, apelido = ?, sexo = ?, morada = ?, image = ? " + 
+				"WHERE nif = ?";
+		try {
+			preparedStmt = con.prepareStatement(query);
+			preparedStmt.setInt(1, nif);
+			preparedStmt.setInt(2, idade);
+			preparedStmt.setString(3, nome);
+			preparedStmt.setString(4, apelido);
+			preparedStmt.setString(5, sexo);
+			preparedStmt.setString(6, morada);
+			preparedStmt.setBlob(7, file);
+			preparedStmt.setInt(8, nif);
+			return preparedStmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return 0;
+		
+	}
+	
+	public static int updateUtente(Connection con, int nif, String sexo, int idade, String nome, String apelido,
+			String morada, Blob file) {
+		PreparedStatement preparedStmt;
+		String query = "UPDATE Pessoa " + 
+				"SET nif = ? , idade = ?, nome = ?, apelido = ?, sexo = ?, morada = ?, image = ? " + 
+				"WHERE nif = ?";
+		try {
+			preparedStmt = con.prepareStatement(query);
+			preparedStmt.setInt(1, nif);
+			preparedStmt.setInt(2, idade);
+			preparedStmt.setString(3, nome);
+			preparedStmt.setString(4, apelido);
+			preparedStmt.setString(5, sexo);
+			preparedStmt.setString(6, morada);
+			preparedStmt.setBlob(7, file);
+			preparedStmt.setInt(8, nif);
+			return preparedStmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return 0;
+		
+	}
+	
 	public static int insertToUtente(Connection con, int nif) {
 
 		PreparedStatement preparedStmt;
@@ -344,6 +394,36 @@ public class Javatosql {
 		return false;
 	}
 
+	public static String nomePessoa (Connection con, int nif) {
+		try {
+			String queryCheck = "SELECT Pessoa.nome FROM Pessoa WHERE Pessoa.nif = ?";
+			PreparedStatement ps = con.prepareStatement(queryCheck);
+			ps.setString(1, String.valueOf(nif));
+			ResultSet resultSet = ps.executeQuery();
+			List<Sqltojava> list = Sqltojava.formTable(resultSet);
+			String s = Sqltojava.getList(con, list);
+			return s.split(" ")[0];
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return null;
+	}
+	
+	public static byte[] getteste(Connection con) {
+		try {
+			String queryCheck = "SELECT Pessoa.image from Pessoa WHERE nif = 321312312";
+			PreparedStatement ps = con.prepareStatement(queryCheck);
+			ResultSet rs = ps.executeQuery();
+			Blob b = null;
+			while(rs.next()) {
+				b = rs.getBlob(1);
+			}
+			return b.getBytes(1, (int) b.length());
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return null;
+	}
 	public static String getUtente(Connection con, int nif) {
 		try {
 			String queryCheck = "SELECT Pessoa.nome, Pessoa.apelido, Pessoa.nif from Pessoa WHERE nif = ?";
@@ -359,7 +439,8 @@ public class Javatosql {
 	}
 
 	public static int getIDconsulta(Connection con, Date data, Time hora, String nome_especialidade, int nif_medico) {
-		String queryCheck = "SELECT Consulta.idConsulta FROM Consulta WHERE dataConsulta = ?" + "AND hora = ?"
+		String queryCheck = "SELECT Consulta.idConsulta FROM Consulta WHERE dataConsulta = ?" + "AND "
+				+ "horaInicio = ?"
 				+ "AND nome_especialidade = ?" + "AND nif_medico = ?";
 		try {
 			PreparedStatement ps = con.prepareStatement(queryCheck);
@@ -404,7 +485,7 @@ public class Javatosql {
 
 	public static String[] listarConsultas(Connection con, int nif) {
 		try {
-			String queryCheck = "SELECT Consulta.Data from Consulta WHERE nif_utente = ?";
+			String queryCheck = "SELECT Consulta.dataConsulta, Consulta.horaInicio, Consulta.nif_medico, Consulta.nome_especialidade from Consulta WHERE nif_utente = ?";
 			PreparedStatement ps = con.prepareStatement(queryCheck);
 			ps.setInt(1, nif);
 			ResultSet resultSet = ps.executeQuery();
@@ -415,20 +496,23 @@ public class Javatosql {
 			System.out.println(e);
 		}
 		return null;
-
 	}
+
 
 	public static String[] listarMedicosbyEsp(Connection con, String nome_especialidade) {
 		try {
+			List<String> list = new ArrayList<String>();
 			String queryCheck = "SELECT Pessoa.nome,Pessoa.apelido,Pessoa.nif,Pessoa.idade "
 					+ "FROM ((Medico INNER JOIN Especialidade ON Medico.nome_especialidade = Especialidade.nome)"
 					+ "INNER JOIN Pessoa ON Medico.nif = Pessoa.nif)" + "WHERE (Medico.nome_especialidade = ?)";
 			PreparedStatement ps = con.prepareStatement(queryCheck);
 			ps.setString(1, nome_especialidade);
 			ResultSet resultSet = ps.executeQuery();
-			List<Sqltojava> list = Sqltojava.formTable(resultSet);
-			String s = Sqltojava.getList(con, list);
-			return s.split(" ");
+			while (resultSet.next()) {
+				list.add(resultSet.getString(1) + " " + resultSet.getString(2) + "=" + resultSet.getInt(3)
+				+"=" + resultSet.getInt(4));
+			}
+			return list.toArray(new String[list.size()]);
 		} catch (SQLException e) {
 			System.out.println(e);
 		}
@@ -558,16 +642,37 @@ public class Javatosql {
 		}
 		return null;
 	}
-
+	public static String[] listarUtenteNome(Connection con) {
+		try {
+			String query = "SELECT Pessoa.nome,Pessoa.apelido"
+					+ " from Pessoa RIGHT JOIN Utente ON Pessoa.nif = Utente.nif";
+			PreparedStatement ps = con.prepareStatement(query);
+			ResultSet rs = ps.executeQuery();
+			List<String> list = new ArrayList<String>();
+			while(rs.next()) {
+				list.add(rs.getString(1) + " " + rs.getString(2));
+			}
+			return list.toArray(new String[list.size()]);
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return null;
+	}
 	public static String[] procurarUtentes(Connection con) {
 		try {
-			String query = "SELECT Pessoa.nif,Pessoa.idade,Pessoa.sexo,Pessoa.nome,Pessoa.apelido,Pessoa.morada"
-					+ " from Utente RIGHT JOIN Pessoa ON Utente.nif = Pessoa.nif";
+			String query = "SELECT Pessoa.nif,Pessoa.nome,Pessoa.apelido,Pessoa.idade,Pessoa.sexo,Pessoa.morada"
+					+ ",Pessoa.image"
+					+ " from Pessoa RIGHT JOIN Utente ON Pessoa.nif = Utente.nif";
 			PreparedStatement ps = con.prepareStatement(query);
-			ResultSet resultSet = ps.executeQuery();
-			List<Sqltojava> list = Sqltojava.formTable(resultSet);
-			String s = Sqltojava.getList(con, list);
-			return s.split("\n");
+			ResultSet rs = ps.executeQuery();
+			List<String> list = new ArrayList<String>();
+			while(rs.next()) {
+				Blob b = rs.getBlob(7);
+				String blob = utils.Base64Converter(b.getBytes(1, (int) b.length()));
+				list.add(rs.getInt(1) + "=" + rs.getString(2) + " " + rs.getString(3) + "="+ rs.getInt(4) + "=" 
+				+ rs.getString(5) + "=" + rs.getString(6) + "=" + blob);
+			}
+			return list.toArray(new String[list.size()]);
 		} catch (SQLException e) {
 			System.out.println(e);
 		}
@@ -672,5 +777,9 @@ public class Javatosql {
 //		return false;
 //	}
 //	
+
+
+
+
 
 }

@@ -3,8 +3,7 @@
 	import="java.sql.PreparedStatement" import="java.sql.SQLException"
 	import="java.sql.*" import="utils.Javatosql" import="utente.Utente"%>
 <%
-	//Utente u = (Utente)session.getAttribute("utente");
-	Utente u = new Utente(892375928);
+Utente u = (Utente)session.getAttribute("utente");
 %>
 <!DOCTYPE html>
 <html class="no-js">

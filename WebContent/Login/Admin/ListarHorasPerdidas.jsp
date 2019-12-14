@@ -146,7 +146,11 @@ label {
 				</div>
 
 			</div>
-
+			<div class="wrapper" id="myButton">
+				<form class="login100-form validate-form" action="Admin_index.jsp">
+					<button class="login100-form-btn" name="button">Voltar</button>
+				</form>
+			</div>
 		</div>
 		<span class="login100-form-title p-b-70" id="result"></span>
 	</div>
@@ -189,25 +193,6 @@ label {
 		}
 		}
 	%>
-
-	<div id="dropDownSelect1"></div>
-
-	<!--===============================================================================================-->
-	<script src="../vendor/jquery/jquery-3.2.1.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="../vendor/animsition/js/animsition.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="../vendor/bootstrap/js/popper.js"></script>
-	<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="../vendor/select2/select2.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="../vendor/daterangepicker/moment.min.js"></script>
-	<script src="../vendor/daterangepicker/daterangepicker.js"></script>
-	<!--===============================================================================================-->
-	<script src="../vendor/countdowntime/countdowntime.js"></script>
-	<!--===============================================================================================-->
-	<script src="../js/main.js"></script>
 
 </body>
 </html>

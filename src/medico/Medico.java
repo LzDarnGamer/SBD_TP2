@@ -7,6 +7,7 @@ import java.sql.Time;
 
 import utils.Javatosql;
 import utils.databaseAcess;
+import utils.utils;
 
 public class Medico {
 	private Connection con;
@@ -27,9 +28,11 @@ public class Medico {
 	}
 	
 	public int criarMancha(Date dia, Time horaInit, Time horaFim) {
-		return Javatosql.insertToMancha(con, dia, horaInit, horaFim, especialidade, nif);
+		if(utils.checkifDayWeek(dia))
+			return Javatosql.insertToMancha(con, dia, horaInit, horaFim, especialidade, nif);
+		return -1;
 	}
-	
+		
 	public int removerMancha(int idManchaHoraria) {
 		return Javatosql.removeMancha(con, idManchaHoraria);
 	}

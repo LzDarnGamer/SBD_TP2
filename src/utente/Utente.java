@@ -3,15 +3,9 @@ package utente;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Time;
-import java.util.Arrays;
-import java.util.Calendar;
 
 import utils.Javatosql;
-import utils.Sqltojava;
 import utils.databaseAcess;
 import utils.utils;
 
@@ -23,7 +17,6 @@ public class Utente {
 
 	public Utente(int nif) {
 		this.nif = nif;
-
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Clinica?"
@@ -38,7 +31,6 @@ public class Utente {
 
 	public int marcarConsulta(Date data, Time hora, String nome_especialidade, int nif_medico) {
 		int id_ManchaHoraria = Javatosql.getIDmancha(con, data, hora, nome_especialidade, nif_medico);
-		System.out.println(id_ManchaHoraria);
 		if (utils.testEspecialidades(idade, sexo, nome_especialidade)) {
 			if (id_ManchaHoraria == -1) {
 				System.out.println("Mancha horária inexistente");
