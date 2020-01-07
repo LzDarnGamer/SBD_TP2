@@ -19,7 +19,7 @@ import com.mysql.cj.Session;
 import admin.Admin;
 import utils.Javatosql;
 
-@WebServlet("/setFlagServlet")
+@WebServlet("/ImageImportMedico")
 @MultipartConfig(maxFileSize = 16177215) // upload file's size up to 16MB
 public class ImageImportMedico extends HttpServlet {
 
@@ -31,8 +31,8 @@ public class ImageImportMedico extends HttpServlet {
 		Admin admin = (Admin) request.getSession(false).getAttribute("admin");
 		String redirected = (String)request.getSession(false).getAttribute("attbuteRedirected");
 
-		String[] tempString = (String[]) request.getSession(false).getAttribute("redirectUtente" + redirected);
-
+		String[] tempString = (String[]) request.getSession(false).getAttribute("redirectMedico" + redirected);
+		
 		int nif;
 		if (redirected != null) {
 			nif = Integer.parseInt(tempString[0]);
@@ -50,12 +50,12 @@ public class ImageImportMedico extends HttpServlet {
 		String venci = request.getParameter("vencimento");
 		int vencimento = Integer.parseInt(venci);
 		String especialidade = request.getParameter("especialidade");
-
+		
 		// obtains the upload file part in this multipart request
 		Part filePart = request.getPart("foto");
 		if(filePart.getSize()<1) {
 			
-			admin.updateMedico(nif, sexo, idade, nome, apelido, morada, tempString[5], vencimento,especialidade);
+			admin.updateMedico(nif, sexo, idade, nome, apelido, morada, tempString[5], vencimento, especialidade);
 			response.sendRedirect(request.getContextPath()+"/Login/Admin/criar_Utente/Admin_Medico.jsp");
 		}
 		else {

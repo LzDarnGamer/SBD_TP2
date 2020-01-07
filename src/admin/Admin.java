@@ -41,7 +41,7 @@ public class Admin {
 		String esp = Javatosql.getEspecialidade(con, nif);
 		Javatosql.removeEspecialidade(con, esp);
 		Javatosql.insertToEspecialidade(con, especialidade);
-		Javatosql.updateMedico(con, nif, sexo, idade, nome, apelido, morada, utils.Base64Decoder(file), vencimento);
+		Javatosql.updateMedico(con, nif, sexo, idade, nome, apelido, morada, utils.Base64Decoder(file), vencimento, especialidade);
 	}
 	
 	public void updateMedico(int nif, String sexo, int idade, String nome, String apelido, String morada, 
@@ -49,7 +49,7 @@ public class Admin {
 		String esp = Javatosql.getEspecialidade(con, nif);
 		Javatosql.removeEspecialidade(con, esp);
 		Javatosql.insertToEspecialidade(con, especialidade);
-		Javatosql.updateMedico(con, nif, sexo, idade, nome, apelido, morada, file, vencimento);
+		Javatosql.updateMedico(con, nif, sexo, idade, nome, apelido, morada, file, vencimento, especialidade);
 	}
 	
 	

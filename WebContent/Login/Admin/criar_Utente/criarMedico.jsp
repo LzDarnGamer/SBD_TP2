@@ -11,7 +11,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<title>Gerir Utente</title>
+<title>Gerir Medico</title>
 <%
 	Admin admin = (Admin) session.getAttribute("admin");
 %>
@@ -29,7 +29,8 @@
 		<section class="signup">
 			<div class="container">
 				<div class="signup-content">
-					<form method="POST" id="signup-form" class="signup-form">
+					<form method="POST" id="signup-form" class="signup-form"
+						action="../../../ImageImportMedico" enctype="multipart/form-data">
 						<div class="form-row">
 							<div class="form-group">
 								<label for="first_name">NIF</label> <input type="number"
@@ -74,7 +75,8 @@
 						<div class="form-row">
 							<div class="form-group">
 								<label for="first_name">Vencimento</label> <input type="text"
-									class="form-input" name="vencimento" id="vencimento" required="required" />
+									class="form-input" name="vencimento" id="vencimento"
+									required="required" />
 							</div>
 							<div class="form-group">
 								<label for="last_name">Especialidade</label> <input type="text"
@@ -87,39 +89,39 @@
 								<label for="first_name">Escolha um foto de perfil</label> <input
 									type="file" class="form-input" name="foto" id="foto" required
 									accept='image/*' />
-								<h5>Nota: Se estiver a editar pode deixar o campo fotografia vazio,
-								o sistema vai perservar a fotografia antiga</h5>
+								<h5>Nota: Se estiver a editar pode deixar o campo
+									fotografia vazio, o sistema vai perservar a fotografia antiga</h5>
 							</div>
 						</div>
 						<div class="form-group">
 							<input type="submit" name="submit" id="submit"
 								class="form-submit" value="Submit" />
-					
+
 						</div>
-						
+
 					</form>
 
 				</div>
 			</div>
-		<div class="form-group" id="myButton">
-			<form id="signup-form" class="signup-form" action="../Admin_index.jsp">
-				<button class="form-submit" name="button">Voltar</button>
-			</form>
-		</div>
+			<div class="form-group" id="myButton">
+				<form id="signup-form" class="signup-form"
+					action="../Admin_index.jsp">
+					<button class="form-submit" name="button">Voltar</button>
+				</form>
+			</div>
 		</section>
 
 		<%
 			String redirected = request.getParameter("attbuteRedirected");
 			String[] tempString = (String[]) session.getAttribute("redirectMedico" + redirected);
-			
+
 			if (redirected != null) {
 				session.setAttribute("attbuteRedirected", redirected);
 				String[] nomeApelido = tempString[1].split(" ");
-				
 		%>
 		<script>
 			document.getElementById("<%=tempString[3]%>").checked = true;
-		</script>	
+		</script>
 		<script>
 			document.getElementById("nif").value = <%=tempString[0]%>;
 			document.getElementById("nif").disabled = true;
@@ -139,43 +141,9 @@
 			//asdasd
 			document.getElementById("foto").required = false;
 		</script>
-			
-		
+
+
 		<%
-			}
-			String sub = request.getParameter("submit");
-			if (sub != null) {
-				int nif;
-				if(redirected != null){
-					nif = Integer.parseInt(tempString[0]);
-				}else{
-					nif = Integer.parseInt(request.getParameter("nif"));
-				}
-				String nome = request.getParameter("nome");
-				String apelido = request.getParameter("apelido");
-				String age = request.getParameter("idade");
-				int idade = Integer.parseInt(age);
-				String sexo = request.getParameter("gender");
-				String morada = request.getParameter("morada");
-				String venci = request.getParameter("vencimento");
-				int vencimento = Integer.parseInt(venci);
-				String especialidade = request.getParameter("especialidade");
-				InputStream is = null;
-				String filePath = request.getParameter("foto");
-				if (filePath.isEmpty()) {
-					admin.updateUtente(nif, sexo, idade, nome, apelido, morada, tempString[7]);
-					response.sendRedirect("Admin_Medico.jsp");
-				} else {
-					File f = new File(filePath);
-					is = new FileInputStream(f);
-					if (redirected != null) {
-						admin.updateUtente(nif, sexo, idade, nome, apelido, morada, is);
-						response.sendRedirect("Admin_Medico.jsp");
-					} else {
-						admin.createMedico(nif, sexo, idade, nome, apelido, morada, vencimento, especialidade, is);
-						response.sendRedirect("Admin_Medico.jsp");
-					}
-				}
 			}
 		%>
 	</div>

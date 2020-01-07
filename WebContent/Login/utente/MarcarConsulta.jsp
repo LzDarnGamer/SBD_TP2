@@ -3,7 +3,7 @@
 	import="java.sql.PreparedStatement" import="java.sql.SQLException"
 	import="java.sql.*" import="utils.Javatosql" import="utente.Utente"%>
 <%
-Utente u = (Utente)session.getAttribute("utente");
+	Utente u = (Utente) session.getAttribute("utente");
 %>
 <!DOCTYPE html>
 <html class="no-js">
@@ -102,27 +102,25 @@ label {
 				class="container" onchange="updateEspecialidade()"
 				id="especialidadeID">
 				<%
-					String espSel = (String)request.getParameter("espSel");
+					String espSel = (String) request.getParameter("espSel");
 					String especialidades[] = Javatosql.listarEspecialidades(u.getCon());
-					
+
 					for (int i = 0; i < especialidades.length; ++i) {
 						String ajuda = especialidades[i].trim();
-						%>
+				%>
 				<option <%if (ajuda.equals(espSel)) {%> selected <%}%>><%=ajuda%></option>
 				<%
 					}
-				
 				%>
 			</select>
 			<button class="login100-form-btn" name="OKesp">OK</button>
-			<input type='hidden' name='especialidadeSelecionada'value='especialidadeAqui' id="especialidade" />
+			<input type='hidden' name='especialidadeSelecionada'
+				value='especialidadeAqui' id="especialidade" />
 		</form>
-		
+
 		<form id="formEsp" method="POST">
-			<label for="format_24">Data</label>
-			<select
-				class="container" onchange="updateData()"
-				id="dataID">
+			<label for="format_24">Data</label> <select class="container"
+				onchange="updateData()" id="dataID">
 				<%
 					if (espSel != null) {
 						String cenas[] = Javatosql.listarDiaHora(u.getCon(), espSel);
@@ -131,139 +129,123 @@ label {
 								String help[] = cenas[i].split(" ");
 								if (help.length == 4) {
 									String coisa = help[0];
-								%>
-									<option><%=coisa%></option>
-								<%
-								}
-							}
-						
-					
 				%>
-			</select>
-			<input type='hidden' name='daataSelecionada' value='dataAqui' id="data" />
-			
-			<select class="container" onchange="updateHora()" id="horaID">
+				<option><%=coisa%></option>
 				<%
-							for (int i = 0; i < cenas.length; ++i) {
+					}
+							}
+				%>
+			</select> <input type='hidden' name='daataSelecionada' value='dataAqui'
+				id="data" /> <select class="container" onchange="updateHora()"
+				id="horaID">
+				<%
+					for (int i = 0; i < cenas.length; ++i) {
 								String help1[] = cenas[i].split(" ");
 								if (help1.length == 4) {
 									String coisa = help1[1];
-								%>
-									<option><%=coisa%></option>
-								<%
-								}
+				%>
+				<option><%=coisa%></option>
+				<%
+					}
 							}
 						}
 					}
 				%>
-			</select>
-			<input type='hidden' name='horaSelecionada' value='horaAqui' id="hora" />
-			
-			<button class="login100-form-btn" name="OKdata">Marcar Consulta</button>
+			</select> <input type='hidden' name='horaSelecionada' value='horaAqui'
+				id="hora" />
+
+			<button class="login100-form-btn" name="OKdata">Marcar
+				Consulta</button>
 			<font color="White" size="15">${marcaSuc}</font>
 		</form>
 
 		<script>
-		
-		window.onload = function(e) {
-			let selector = document.getElementById('especialidadeID');
-		    let value = selector[selector.selectedIndex].value;
-			document.getElementById("especialidade").setAttribute("value", value);
-			
-			let selectData = document.getElementById('dataID');
-			let valueData = selectData[selectData.selectedIndex].value;
-			document.getElementById("data").setAttribute("value", valueData);
-			
-			let selectHora = document.getElementById('horaID');
-			let valueHora = selectHora[selectHora.selectedIndex].value;
-			document.getElementById("hora").setAttribute("value", valueHora);		
-		}
-		
-		
-			function updateEspecialidade () {
-				var selector = document.getElementById('especialidadeID');
-			    var value = selector[selector.selectedIndex].value;
-			    
-				document.getElementById("especialidade").setAttribute("value", value);
-				
+			window.onload = function(e) {
+				let selector = document.getElementById('especialidadeID');
+				let value = selector[selector.selectedIndex].value;
+				document.getElementById("especialidade").setAttribute("value",
+						value);
+
+				let selectData = document.getElementById('dataID');
+				let valueData = selectData[selectData.selectedIndex].value;
+				document.getElementById("data")
+						.setAttribute("value", valueData);
+
+				let selectHora = document.getElementById('horaID');
+				let valueHora = selectHora[selectHora.selectedIndex].value;
+				document.getElementById("hora")
+						.setAttribute("value", valueHora);
 			}
-			
-			function updateData () {
+
+			function updateEspecialidade() {
+				var selector = document.getElementById('especialidadeID');
+				var value = selector[selector.selectedIndex].value;
+
+				document.getElementById("especialidade").setAttribute("value",
+						value);
+
+			}
+
+			function updateData() {
 				var selectData = document.getElementById('dataID');
 				var valueData = selectData[selectData.selectedIndex].value;
-				document.getElementById("data").setAttribute("value", valueData);
+				document.getElementById("data")
+						.setAttribute("value", valueData);
 			}
-			
-			function updateHora () {
+
+			function updateHora() {
 				var selectHora = document.getElementById('horaID');
 				var valueHora = selectHora[selectHora.selectedIndex].value;
-				document.getElementById("hora").setAttribute("value", valueHora);
+				document.getElementById("hora")
+						.setAttribute("value", valueHora);
 			}
+		<%String espBtn = request.getParameter("OKesp");
+			if (espBtn != null) {
+				String esp = request.getParameter("especialidadeSelecionada");
+
+				response.sendRedirect("MarcarConsulta.jsp?espSel=" + esp);
+			}
+
+			String dataBtn = request.getParameter("OKdata");
+			if (dataBtn != null) {
+				String dataS = request.getParameter("daataSelecionada");
+				String horaS = request.getParameter("horaSelecionada");
+
+				String haha[] = dataS.split("-");
+				Date data = Javatosql.dateFormater(Integer.parseInt(haha[0]), Integer.parseInt(haha[1]),
+						Integer.parseInt(haha[2]));
+
+				String spaghetti[] = horaS.split(":");
+				Time hora = Javatosql.timeFormater(spaghetti[0], spaghetti[1]);
+
+				String cenas[] = Javatosql.listarDiaHora(u.getCon(), espSel);
+				int nif_medico = Integer.parseInt(cenas[0].split(" ")[3]);
+				if (u.marcarConsulta(data, hora, espSel, nif_medico) == 1) {%>
+			var div = document.createElement("div");
+			div.innerHTML = "Consulta marcada com sucesso";
+			div.style.marginTop = "10px";
+			document.getElementById('menuP').appendChild(div);
+		<%} else {%>
+			var div = document.createElement("div");
+			div.innerHTML = "Consulta não marcada! Verifique os parâmetros";
+			div.style.color = "red";
+			div.style.marginTop = "10px";
+			document.getElementById('menuP').appendChild(div);
+		<%}
+				//response.sendRedirect("MarcarConsulta.jsp?espSel=" + espSel + "&data=" + dataS + "&hora=" + horaS);
+			}%>
 			
-				<%
-				String espBtn = request.getParameter("OKesp");
-				if (espBtn != null) {
-					String esp = request.getParameter("especialidadeSelecionada");
-					
-					response.sendRedirect("MarcarConsulta.jsp?espSel=" + esp);
-				}
-				
-				String dataBtn = request.getParameter("OKdata");
-				if (dataBtn != null) {
-					String dataS = request.getParameter("daataSelecionada");
-					String horaS = request.getParameter("horaSelecionada");
-					
-					String haha[] = dataS.split("-");
-					Date data = Javatosql.dateFormater(Integer.parseInt(haha[0]), Integer.parseInt(haha[1]), Integer.parseInt(haha[2]));
-					
-					String spaghetti[] = horaS.split(":");
-					Time hora = Javatosql.timeFormater(spaghetti[0], spaghetti[1]);
-					
-					String cenas[] = Javatosql.listarDiaHora(u.getCon(), espSel);
-					int nif_medico = Integer.parseInt(cenas[0].split(" ")[3]);
-					if(u.marcarConsulta(data, hora, espSel, nif_medico)==1){
-						%>
-						var div = document.createElement("div");
-						div.innerHTML = "Consulta marcada com sucesso";
-						div.style.marginTop = "10px";
-						document.getElementById('menuP').appendChild(div);
-						<%
-					}else{
-						%>
-						var div = document.createElement("div");
-						div.innerHTML = "Consulta não marcada! Verifique os parâmetros";
-						div.style.color = "red";
-						div.style.marginTop = "10px";
-						document.getElementById('menuP').appendChild(div);
-						<%
-					}
-					//response.sendRedirect("MarcarConsulta.jsp?espSel=" + espSel + "&data=" + dataS + "&hora=" + horaS);
-				}
-				%>
-			
-			</script>
+		</script>
+		<div class="wrapper" id="myButton">
+			<form class="login100-form validate-form" action="Medico.jsp">
+				<button class="login100-form-btn" name="button">Voltar</button>
+			</form>
+		</div>
 	</div>
 	<!-- <div class="container-login100-form-btn">
 		<button class="login100-form-btn" name="login">Entrar</button>
 	</div> -->
 </body>
-
-<!--===============================================================================================-->
-<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-<!--===============================================================================================-->
-<script src="vendor/animsition/js/animsition.min.js"></script>
-<!--===============================================================================================-->
-<script src="vendor/bootstrap/js/popper.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<!--===============================================================================================-->
-<script src="vendor/select2/select2.min.js"></script>
-<!--===============================================================================================-->
-<script src="vendor/daterangepicker/moment.min.js"></script>
-<script src="vendor/daterangepicker/daterangepicker.js"></script>
-<!--===============================================================================================-->
-<script src="vendor/countdowntime/countdowntime.js"></script>
-<!--===============================================================================================-->
-<script src="js/main.js"></script>
 
 
 

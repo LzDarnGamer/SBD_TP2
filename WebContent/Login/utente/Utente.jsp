@@ -62,7 +62,7 @@
 					}
 				%> <%=Javatosql.nomePessoa(pessoa.getCon(), nif)%> <br> <br>
 					<div class="container-login100-form-btn">
-						<img height="200" width="150"
+						<img style="border-radius: 50%; border: solid 5px black;" height="200" width="200"
 							src="data:image/png;base64,<%=pessoa.getUtenteImagem()%>"
 							alt="Foto de Perfil" />
 					</div>

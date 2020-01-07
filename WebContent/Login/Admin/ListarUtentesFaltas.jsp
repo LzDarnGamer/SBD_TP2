@@ -133,12 +133,12 @@ label {
 
 					<form id="formEsp">
 						<label style="color: black;" for="format_24">Número de
-							Faltas</label> <input class="container1" type="number" name="numFaltas">
+							Faltas</label> <input class="container1" type="number" name="numFaltas" required="required">
 						<br> <label style="color: black;" for="format_24">Data
 							Início</label> <input class="container" type="text" id="calendarInit"
-							name="calendarInit"> <br> <label
+							name="calendarInit" required="required"> <br> <label
 							style="color: black;" for="format_24">Data Fim</label> <input
-							class="container" type="text" id="calendarEnd" name="calendarEnd">
+							class="container" type="text" id="calendarEnd" name="calendarEnd" required="required">
 
 						<br> <label style="color: black;" for="format_24">Selecione
 							o tipo</label> <select class="container" name="status" id="status">

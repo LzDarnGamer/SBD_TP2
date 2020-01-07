@@ -120,9 +120,9 @@ label {
 
 						<label style="color: black;" for="format_24">Data Início</label> <input
 							class="container" type="text" id="calendarInit"
-							name="calendarInit"> <label style="color: black;"
+							name="calendarInit" required="required" readonly="readonly"> <label style="color: black;"
 							for="format_24">Data Fim</label> <input class="container"
-							type="text" id="calendarEnd" name="calendarEnd"> <br>
+							type="text" id="calendarEnd" name="calendarEnd" required="required" readonly="readonly"> <br>
 
 						<label style="color: black;" for="format_24">Selecione o
 							Médico</label> <select class="container" name="medics" id="medics">
@@ -187,7 +187,7 @@ label {
 				String res = admin.listarMedicoTempoPerdido(dI, dF, value);
 	%>
 	<script>
-			document.getElementById("result").innerHTML = "O médico com NIF:<%=value%>, perdeu <%=res%> horas com faltas/cancelamentos entre <%=dI%> e <%=dF%>";
+			document.getElementById("result").innerHTML = "O médico com NIF:  <span style=\"color: 	#00FF00;\"> <%=value%></span> <br> Perdeu <span style=\"color: 	#00FF00;\"> <%=res%></span> horas com faltas/cancelamentos <br> Entre <span style=\"color: 	#00FF00;\"> <%=dI%></span> e <span style=\"color: 	#00FF00;\"> <%=dF%></span>";
 	</script>
 	<%
 		}

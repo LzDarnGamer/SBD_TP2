@@ -19,7 +19,7 @@ import com.mysql.cj.Session;
 import admin.Admin;
 import utils.Javatosql;
 
-@WebServlet("/setFlagServlet")
+@WebServlet("/ImageImportUtente")
 @MultipartConfig(maxFileSize = 16177215) // upload file's size up to 16MB
 public class ImageImportUtente extends HttpServlet {
 

@@ -4,7 +4,7 @@
 	import="java.sql.*" import="utils.Javatosql" import="medico.Medico"
 	import="java.util.Arrays" import="java.sql.Date"%>
 <%
-	Medico m = (Medico)session.getAttribute("medico");
+	Medico m = (Medico) session.getAttribute("medico");
 	//Medico m = new Medico(830013912);
 %>
 <!DOCTYPE html>
@@ -50,21 +50,20 @@
 <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap"
 	rel="stylesheet">
 <style>
-
 table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 100%;
 }
 
 td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
 }
 
 tr:nth-child(even) {
-  background-color: #dddddd;
+	background-color: #dddddd;
 }
 
 body, html {
@@ -156,27 +155,28 @@ label {
 		<form id="formEsp" method="POST">
 			<label for="format_24">Data</label> <input type="text" name="date">
 			<label for="format_24">Hora</label> <input type="text" name="time">
-			<label for="format_24">Especialidade</label> <input type="text" name="especialidade" value="<%=m.getEspecialidade()%>" disabled>
+			<label for="format_24">Especialidade</label> <input type="text"
+				name="especialidade" value="<%=m.getEspecialidade()%>" disabled>
 
-			<button class="login100-form-btn" name="AddMancha" style="margin-bottom: 15px; height: 30px">Adicionar Mancha Horaria
-			</button>
+			<button class="login100-form-btn" name="AddMancha"
+				style="margin-bottom: 15px; height: 30px">Adicionar Mancha
+				Horaria</button>
 
 			<%
-			String ajuda = (String)request.getParameter("AddMancha");
-			if (ajuda != null) {
-				String diaaa = (String)request.getParameter("date");
-				String diaa[] = diaaa.split("/");
-				Date dia = Javatosql.dateFormater(Integer.parseInt(diaa[0]),
-													Integer.parseInt(diaa[1]),
-													Integer.parseInt(diaa[2]));
-				
-				String hora = (String)request.getParameter("time");
-				Time horaInit = Javatosql.timeFormater(hora.split(":")[0], hora.split(":")[1]);
-				
-				m.criarMancha(dia, horaInit);
-			}
+				String ajuda = (String) request.getParameter("AddMancha");
+				if (ajuda != null) {
+					String diaaa = (String) request.getParameter("date");
+					String diaa[] = diaaa.split("-");
+					Date dia = Javatosql.dateFormater(Integer.parseInt(diaa[0]), Integer.parseInt(diaa[1]),
+							Integer.parseInt(diaa[2]));
+
+					String hora = (String) request.getParameter("time");
+					Time horaInit = Javatosql.timeFormater(hora.split(":")[0], hora.split(":")[1]);
+
+					m.criarMancha(dia, horaInit);
+				}
 			%>
-			<table>
+			<table id="customers">
 				<tr>
 					<th>ID</th>
 					<th>Dia</th>
@@ -184,89 +184,93 @@ label {
 					<th>Hora de Fim</th>
 				</tr>
 				<tr>
-					
+
 				</tr>
 				<%
 					String[] a = m.listarManchasHorarias();
-					for (int i = 0; i < a.length; ++i) {
-						%>
-						<tr>
-							<td style="color:black"><%=a[i]%></td>
-							
-							<td style="color:black"><input type="text" name="date<%=i%>" value="<%=a[i+1]%>">
-								<button class="login100-form-btn" name="dateBtn<%=i%>" style="float: right; margin-bottom: 10px; height: 20px; width: 50px">OK</button>
-							</td>
-							
-							<td style="color:black"><input type="text" name="hour<%=i%>" value="<%=a[i+2]%>">
-								<button class="login100-form-btn" name="hourBtn<%=i%>" style="float: right; margin-bottom: 10px; height: 20px; width: 50px">OK</button>
-							</td>
-							
-							<td style="color:black"><%=a[i+3]%></td>
-						</tr>
-						<%
+					System.out.println(Arrays.toString(a));
+					System.out.println(a.length);
+					if (a.length >= 3 && a != null) {
+						for (int i = 0; i < a.length; ++i) {
+				%>
+				<tr>
+					<td style="color: black"><%=a[i]%></td>
+
+					<td style="color: black"><input type="text" name="date<%=i%>"
+						value="<%=a[i + 1]%>">
 						
-						String dateBtn = (String)request.getParameter("dateBtn"+i);
-						String hourBtn = (String)request.getParameter("hourBtn"+i);
-						
-						if (dateBtn != null) {
-							// Dar update conforme a data
-							String data = (String)request.getParameter("date"+i);
-							
-							String[] datee = data.split("-");
-							
-							String horaInicio = (String)request.getParameter("hour"+i);
-							String[] h1 = horaInicio.split(":");
-							
-							m.atualizarMancha(Javatosql.dateFormater(Integer.parseInt(datee[0]),
-																		Integer.parseInt(datee[1]),
-																		Integer.parseInt(datee[2])),
-																		Javatosql.timeFormater(h1[0], h1[1]));
+						<button class="login100-form-btn" name="dateBtn<%=i%>"
+							style="float: right; margin-bottom: 10px; height: 20px; width: 50px">OK</button>
+					</td>
+
+					<td style="color: black"><input type="text" name="hour<%=i%>"
+						value="<%=a[i + 2]%>">
+						<button class="login100-form-btn" name="hourBtn<%=i%>"
+							style="float: right; margin-bottom: 10px; height: 20px; width: 50px">OK</button>
+					</td>
+
+					<td style="color: black"><%=a[i + 3]%></td>
+				</tr>
+
+				<%
+							String dateBtn = (String) request.getParameter("dateBtn" + i);
+							String hourBtn = (String) request.getParameter("hourBtn" + i);
+
+							if (dateBtn != null) {
+								
+								session.setAttribute("type", "data");
+								
+								// Mandar para o update
+								response.sendRedirect("AtualizarWait.jsp?data=" + (String)request.getParameter("date" + i) +
+																	"&hora=" + (String)request.getParameter("hour" + i));
+								
+								// Dar update conforme a data
+								/*String data = (String) request.getParameter("date" + i);
+
+								String[] datee = data.split("-");
+
+								String horaInicio = (String) request.getParameter("hour" + i);
+								String[] h1 = horaInicio.split(":");
+
+								m.atualizarMancha(Javatosql.dateFormater(Integer.parseInt(datee[0]), Integer.parseInt(datee[1]),
+										Integer.parseInt(datee[2])), Javatosql.timeFormater(h1[0], h1[1]));
+								*/
+							}
+
+							if (hourBtn != null) {
+								
+								session.setAttribute("type", "hora");
+								
+								response.sendRedirect("AtualizarWait.jsp?data=" + (String)request.getParameter("date" + i) +
+										"&hora=" + (String)request.getParameter("hour" + i));
+								
+								// Dar update conforme a hora
+								/*String hora = (String) request.getParameter("hour" + i);
+								String[] h = hora.split(":");
+
+								String data = (String) request.getParameter("date" + i);
+								String[] datee = data.split("-");
+								Date d = Javatosql.dateFormater(Integer.parseInt(datee[0]), Integer.parseInt(datee[1]),
+										Integer.parseInt(datee[2]));
+
+								m.atualizarMancha(Javatosql.timeFormater(h[0], h[1]), d);
+								*/
+
+							}
+
+							i += 3;
 						}
-						
-						if (hourBtn != null) {
-							// Dar update conforme a hora
-							String hora = (String)request.getParameter("hour"+i);
-							String[] h = hora.split(":");
-							
-							String data = (String)request.getParameter("date"+i);
-							String[] datee = data.split("-");
-							Date d = Javatosql.dateFormater(Integer.parseInt(datee[0]),
-															Integer.parseInt(datee[1]),
-															Integer.parseInt(datee[2]));
-							
-							
-							m.atualizarMancha(Javatosql.timeFormater(h[0], h[1]), d);
-							
-						}
-						
-						i+=3;						
 					}
 				%>
 			</table>
 
 		</form>
 	</div>
+	<div class="wrapper" id="myButton">
+		<form class="login100-form validate-form" action="Medico.jsp">
+			<button class="login100-form-btn" name="button">Voltar</button>
+		</form>
+	</div>
 </body>
-
-
-
-<!--===============================================================================================-->
-<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-<!--===============================================================================================-->
-<script src="vendor/animsition/js/animsition.min.js"></script>
-<!--===============================================================================================-->
-<script src="vendor/bootstrap/js/popper.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-<!--===============================================================================================-->
-<script src="vendor/select2/select2.min.js"></script>
-<!--===============================================================================================-->
-<script src="vendor/daterangepicker/moment.min.js"></script>
-<script src="vendor/daterangepicker/daterangepicker.js"></script>
-<!--===============================================================================================-->
-<script src="vendor/countdowntime/countdowntime.js"></script>
-<!--===============================================================================================-->
-<script src="js/main.js"></script>
-
-
 
 </html>

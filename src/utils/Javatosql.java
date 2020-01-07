@@ -119,12 +119,23 @@ public class Javatosql {
 	}
 
 	public static int updateMedico(Connection con, int nif, String sexo, int idade, String nome, String apelido,
-			String morada, Blob file, int vencimento) {
+			String morada, Blob file, int vencimento, String especialidade) {
 		PreparedStatement preparedStmt;
-		String query = "UPDATE Pessoa p, Medico m"
-				+ "SET p.nif = ? , p.idade = ?, p.nome = ?, p.apelido = ?, p.sexo = ?, p.morada = ?, p.image = ? "
-				+ "m.vencimento = ? "
-				+ "WHERE p.nif = ? and m.nif = ?";
+		String query = "UPDATE " + 
+				"	Pessoa p, Medico m " + 
+				" SET " + 
+				"	 p.nif = ?, " + 
+				"    p.idade = ?, " + 
+				"    p.nome = ?, "+ 
+				"    p.apelido = ?," + 
+				"    p.sexo = ?," + 
+				"    p.morada = ?," + 
+				"    p.image = ?," + 
+				"    m.vencimento = ?," + 
+				"    m.nome_especialidade = ?" + 
+				" WHERE " + 
+				"	p.nif = ? and m.nif = ?";
+		System.out.println(query);
 		try {
 			preparedStmt = con.prepareStatement(query);
 			preparedStmt.setInt(1, nif);
@@ -135,8 +146,9 @@ public class Javatosql {
 			preparedStmt.setString(6, morada);
 			preparedStmt.setBlob(7, file);
 			preparedStmt.setInt(8, vencimento);
-			preparedStmt.setInt(9, nif);
+			preparedStmt.setString(9, especialidade);
 			preparedStmt.setInt(10, nif);
+			preparedStmt.setInt(11, nif);
 			return preparedStmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e);
@@ -145,12 +157,22 @@ public class Javatosql {
 	}
 
 	public static int updateMedico(Connection con, int nif, String sexo, int idade, String nome, String apelido,
-			String morada, InputStream file, int vencimento) {
+			String morada, InputStream file, int vencimento, String especialidade) {
 		PreparedStatement preparedStmt;
-		String query = "UPDATE Pessoa p, Medico m"
-				+ "SET p.nif = ? , p.idade = ?, p.nome = ?, p.apelido = ?, p.sexo = ?, p.morada = ?, p.image = ? "
-				+ "m.vencimento = ? "
-				+ "WHERE p.nif = ? and m.nif = ?";
+		String query = "UPDATE " + 
+				"	Pessoa p, Medico m " + 
+				" SET " + 
+				"	 p.nif = ?, " + 
+				"    p.idade = ?, " + 
+				"    p.nome = ?, "+ 
+				"    p.apelido = ?," + 
+				"    p.sexo = ?," + 
+				"    p.morada = ?," + 
+				"    p.image = ?," + 
+				"    m.vencimento = ?," + 
+				"    m.nome_especialidade = ?" + 
+				" WHERE " + 
+				"	p.nif = ? and m.nif = ?";
 		try {
 			preparedStmt = con.prepareStatement(query);
 			preparedStmt.setInt(1, nif);
@@ -161,8 +183,9 @@ public class Javatosql {
 			preparedStmt.setString(6, morada);
 			preparedStmt.setBlob(7, file);
 			preparedStmt.setInt(8, vencimento);
-			preparedStmt.setInt(9, nif);
+			preparedStmt.setString(9, especialidade);
 			preparedStmt.setInt(10, nif);
+			preparedStmt.setInt(11, nif);
 			return preparedStmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e);
@@ -872,8 +895,8 @@ public class Javatosql {
 
 	public static int listarTempoPerdido(Connection con, int nif_medico, Date init, Date fim) {
 		try {
-			String query = "SELECT COUNT(*),(SELECT COUNT(*) FROM Falta WHERE (Falta.nif_medico = ?"
-					+ " and Falta.dataConsulta between ? and ? ))"
+			String query = "SELECT COUNT(*),(SELECT COUNT(*) FROM Consulta c WHERE (c.nif_medico = ?"
+					+ " and c.dataConsulta between ? and ? and c.statuss = 'Falta'))"
 					+ "FROM Cancelamento WHERE (Cancelamento.nif_medico = ?"
 					+ " and Cancelamento.dataConsulta between ? and ?)";
 			PreparedStatement ps = con.prepareStatement(query);
