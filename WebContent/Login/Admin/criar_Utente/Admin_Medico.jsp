@@ -31,13 +31,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap"
 	rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
 </head>
+
+
 
 
 <body style="background-image: url('../../images/back.jpg');">
 
-	<div class="limiter" id="refresher">
+	<div class="limiter">
 		<div class="wrapper" id="myButton">
 			<form class="login100-form validate-form" action="../Admin_index.jsp">
 				<button class="login100-form-btn" name="button">Voltar</button>
@@ -47,25 +48,18 @@
 
 			<div class="wrap-login100 p-t-85 p-b-20">
 				<form class="login100-form validate-form">
-					<span class="login100-form-title p-b-70">Utentes Existentes</span>
+					<span class="login100-form-title p-b-70">Médicos Existentes</span>
 				</form>
 
-				<form id="formEsp" method="POST" action="criarUtente.jsp">
-					<button class="login100-form-btn" name="criarUtente">Adicionar
-						novo utente</button>
-				</form>
-				<br>
-				<form id="formEsp">
-					<button class="login100-form-btn" name="importarUtente">Importar
-						novo utente</button>
-					<input type="file" class="form-input" name="importar" id="importar"
-						accept='text/xml' style="background-color: #57b846;" />
+				<form id="formEsp" method="POST" action="criarMedico.jsp">
+					<button class="login100-form-btn" name="criarMedico">Adicionar
+						novo médico</button>
 				</form>
 			</div>
 			<br> <br> <br>
 			<table id="customers">
 				<%
-					String[] utentes = admin.listarUtente();
+					String[] medicos = admin.listarMedicos();
 				%>
 
 				<tr>
@@ -74,14 +68,15 @@
 					<th>Idade</th>
 					<th>Sexo</th>
 					<th>Morada</th>
+					<th>Vencimento</th>
+					<th>Especialidade</th>
 					<th>Foto</th>
 					<th>Editar</th>
 					<th>Eliminar</th>
 				</tr>
 				<%
-					for (int i = 0; i < utentes.length; i++) {
-						String[] tempString = utentes[i].split("=");
-						System.out.print(Arrays.toString(tempString));
+					for (int i = 0; i < medicos.length; i++) {
+						String[] tempString = medicos[i].split("=");
 				%>
 				<tr>
 					<td><%=tempString[0]%></td>
@@ -89,21 +84,24 @@
 					<td><%=tempString[2]%></td>
 					<td><%=tempString[3]%></td>
 					<td><%=tempString[4]%></td>
+					<td><%=tempString[5]%></td>
+					<td><%=tempString[6]%></td>
+
 					<td><img height="120" width="100"
-						src="data:image/png;base64,<%=tempString[5]%>"
+						src="data:image/png;base64,<%=tempString[7]%>"
 						alt="Foto de Perfil" /></td>
 					<td>
 						<%
-							session.setAttribute("redirectUtente" + i, tempString);
+							session.setAttribute("redirectMedico" + i, tempString);
 						%>
 						<form id="formEsp" method="POST"
-							action="criarUtente.jsp?attbuteRedirected=<%=i%>">
+							action="criarMedico.jsp?attbuteRedirected=<%=i%>">
 							<button class="login100-form-btn" name="editUtente">Editar</button>
 						</form>
 					</td>
 					<td>
 						<form id="formEsp" method="POST"
-							action="../EliminarWait.jsp?reloadDel=<%=tempString[0]%>&type=utente">
+							action="../EliminarWait.jsp?reloadDel=<%=tempString[0]%>&type=medico">
 							<button style="background-color: red;" class="login100-form-btn"
 								name="eliminar">Eliminar</button>
 						</form>
@@ -113,25 +111,8 @@
 					}
 				%>
 			</table>
-
 		</div>
 	</div>
-	<%
-		String btn = request.getParameter("importarUtente");
-		if (btn != null) {
-			String path = request.getParameter("importar");
-			if (path.length() > 1) {
-				session.setAttribute("importarPath", path);
-				
-	%>
-	<script>
-		var timer = setTimeout(function() {
-			window.location = "../EliminarWait.jsp?type=importar"
-		}, 100);
-	</script>
-	<%
-		}
-		}
-	%>
+	
 </body>
 </html>

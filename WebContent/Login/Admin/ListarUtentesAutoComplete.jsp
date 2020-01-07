@@ -131,9 +131,8 @@ label {
 				<div class="wrapper" id="menuP">
 
 					<form id="formEsp">
-						<label style="color: black;" for="format_24">Selecione a
-							especialidade</label> <input class="container" list="browsers"
-							name="utentes">
+						<label style="color: black;" for="format_24">Selecione o
+							Utente</label> <input class="container" list="browsers" name="utentes">
 						<datalist id="browsers">
 							<%
 								String[] utentes = admin.listarUtenteNome();
@@ -165,6 +164,8 @@ label {
 					<th>Idade</th>
 					<th>Sexo</th>
 					<th>Morada</th>
+					<th>Foto</th>
+					<th>Exportar</th>
 				</tr>
 				<%
 					for (String s : utentesTodos) {
@@ -177,12 +178,22 @@ label {
 					<td><%=tempString[2].trim()%></td>
 					<td><%=tempString[3].trim()%></td>
 					<td><%=tempString[4].trim()%></td>
+					<td><img height="120" width="100"
+						src="data:image/png;base64,<%=tempString[5]%>"
+						alt="Foto de Perfil" /></td>
+					<td>
+						<form id="formEsp" method="POST"
+							action="EliminarWait.jsp?reloadDel=<%=tempString[0]%>&type=exportar">
+							<button class="login100-form-btn" name="editUtente">Exportar</button>
+						</form>
+					</td>
 				</tr>
 				<%
 					}
 						}
 					}
 				%>
+
 
 
 			</table>

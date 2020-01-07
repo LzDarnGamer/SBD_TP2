@@ -19,12 +19,12 @@ public class Login {
 	 */
 	public String Entrar(int nif) {
 
-		if (nif == 123465789) {
-			return "Administrador.jsp";
+		if (nif == 999999999) {
+			return "Admin/Admin_index.jsp";
 		} else if (Javatosql.checkUtente(t.getCon(), nif)) {
-			return "Utente.jsp";
+			return "utente/Utente.jsp";
 		} else if (Javatosql.checkMedico(t.getCon(), nif)) {
-			return "Medico.jsp";
+			return "medico/Medico.jsp";
 		} else {
 			return null;
 		}

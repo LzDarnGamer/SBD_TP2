@@ -13,7 +13,7 @@ Utente u = (Utente)session.getAttribute("utente");
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 <!--===============================================================================================-->
-<link rel="icon" type="image/png" href="images/icons/favicon.ico" />
+<link rel="icon" type="image/png" href="../images/icons/favicon.ico" />
 <!--===============================================================================================-->
 <link rel="stylesheet" type="text/css"
 	href="vendor/bootstrap/css/bootstrap.min.css">
@@ -38,10 +38,10 @@ Utente u = (Utente)session.getAttribute("utente");
 <link rel="stylesheet" type="text/css"
 	href="vendor/daterangepicker/daterangepicker.css">
 <!--===============================================================================================-->
-<link rel="stylesheet" type="text/css" href="css/util.css">
-<link rel="stylesheet" type="text/css" href="css/main.css">
+<link rel="stylesheet" type="text/css" href="../css/util.css">
+<link rel="stylesheet" type="text/css" href="../css/main.css">
 <!--===============================================================================================-->
-<title>Marcar Consulta</title>
+<title>Utente</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="dist/njtimepicker.css">
@@ -94,7 +94,7 @@ label {
 </style>
 </head>
 
-<body>
+<body style="background-image: url('../images/back.jpg');">
 
 	<div class="wrapper" id="menuP">
 		<form id="formEsp" method="POST">

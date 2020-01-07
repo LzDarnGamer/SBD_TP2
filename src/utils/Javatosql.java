@@ -32,16 +32,13 @@ public class Javatosql {
 	private static final String manchaQuery = "insert into ManchaHoraria ( "
 			+ "dia, horaInicio, horaFim, nome_Especialidade, nif_medico)" + "values(?,?,?,?,?)";
 
-	private static final String faltaQuery = "insert into Falta ( "
-			+ "nif_utente, nif_medico, horaInicio, horaFim, dataConsulta, nome_Especialidade)" + "values(?,?,?,?,?,?)";
-
-	private static final String presencaQuery = "insert into Presenca ( "
-			+ "nif_utente, nif_medico, horaInicio, horaFim, dataConsulta, nome_Especialidade)" + "values(?,?,?,?,?,?)";
-
 	private static final String remarcacaoQuery = "insert into Remarcacoes( "
 			+ "nif_utente, nif_medico, horaInicio, horaFim, dataConsulta, nome_Especialidade)" + "values(?,?,?,?,?,?)";
 
 	private static final String cancelamentoQuery = "insert into Cancelamento()";
+
+	private static final String novaManchaQuery = "insert into ManchaHorariaMarcada "
+			+ "(dia, horaInicio, horaFim, pessoas, nif_medico)" + "values(?,?,?,?,?)";
 
 	public static int insertToPessoa(Connection con, int nif, int idade, String sexo, String nome, String apelido,
 			String morada, InputStream image) {
@@ -61,12 +58,12 @@ public class Javatosql {
 		}
 		return 0;
 	}
+
 	public static int updateUtente(Connection con, int nif, String sexo, int idade, String nome, String apelido,
 			String morada, InputStream file) {
 		PreparedStatement preparedStmt;
-		String query = "UPDATE Pessoa " + 
-				"SET nif = ? , idade = ?, nome = ?, apelido = ?, sexo = ?, morada = ?, image = ? " + 
-				"WHERE nif = ?";
+		String query = "UPDATE Pessoa "
+				+ "SET nif = ? , idade = ?, nome = ?, apelido = ?, sexo = ?, morada = ?, image = ? " + "WHERE nif = ?";
 		try {
 			preparedStmt = con.prepareStatement(query);
 			preparedStmt.setInt(1, nif);
@@ -82,15 +79,13 @@ public class Javatosql {
 			System.out.println(e);
 		}
 		return 0;
-		
 	}
-	
+
 	public static int updateUtente(Connection con, int nif, String sexo, int idade, String nome, String apelido,
 			String morada, Blob file) {
 		PreparedStatement preparedStmt;
-		String query = "UPDATE Pessoa " + 
-				"SET nif = ? , idade = ?, nome = ?, apelido = ?, sexo = ?, morada = ?, image = ? " + 
-				"WHERE nif = ?";
+		String query = "UPDATE Pessoa "
+				+ "SET nif = ? , idade = ?, nome = ?, apelido = ?, sexo = ?, morada = ?, image = ? " + "WHERE nif = ?";
 		try {
 			preparedStmt = con.prepareStatement(query);
 			preparedStmt.setInt(1, nif);
@@ -101,20 +96,89 @@ public class Javatosql {
 			preparedStmt.setString(6, morada);
 			preparedStmt.setBlob(7, file);
 			preparedStmt.setInt(8, nif);
-			return preparedStmt.executeUpdate();
+			System.out.println(preparedStmt.executeUpdate());
+			return 0;
 		} catch (SQLException e) {
 			System.out.println(e);
 		}
 		return 0;
-		
+
 	}
-	
+
 	public static int insertToUtente(Connection con, int nif) {
 
 		PreparedStatement preparedStmt;
 		try {
 			preparedStmt = con.prepareStatement(utenteQuery);
 			preparedStmt.setInt(1, nif);
+			return preparedStmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return 0;
+	}
+
+	public static int updateMedico(Connection con, int nif, String sexo, int idade, String nome, String apelido,
+			String morada, Blob file, int vencimento) {
+		PreparedStatement preparedStmt;
+		String query = "UPDATE Pessoa p, Medico m"
+				+ "SET p.nif = ? , p.idade = ?, p.nome = ?, p.apelido = ?, p.sexo = ?, p.morada = ?, p.image = ? "
+				+ "m.vencimento = ? "
+				+ "WHERE p.nif = ? and m.nif = ?";
+		try {
+			preparedStmt = con.prepareStatement(query);
+			preparedStmt.setInt(1, nif);
+			preparedStmt.setInt(2, idade);
+			preparedStmt.setString(3, nome);
+			preparedStmt.setString(4, apelido);
+			preparedStmt.setString(5, sexo);
+			preparedStmt.setString(6, morada);
+			preparedStmt.setBlob(7, file);
+			preparedStmt.setInt(8, vencimento);
+			preparedStmt.setInt(9, nif);
+			preparedStmt.setInt(10, nif);
+			return preparedStmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return 0;
+	}
+
+	public static int updateMedico(Connection con, int nif, String sexo, int idade, String nome, String apelido,
+			String morada, InputStream file, int vencimento) {
+		PreparedStatement preparedStmt;
+		String query = "UPDATE Pessoa p, Medico m"
+				+ "SET p.nif = ? , p.idade = ?, p.nome = ?, p.apelido = ?, p.sexo = ?, p.morada = ?, p.image = ? "
+				+ "m.vencimento = ? "
+				+ "WHERE p.nif = ? and m.nif = ?";
+		try {
+			preparedStmt = con.prepareStatement(query);
+			preparedStmt.setInt(1, nif);
+			preparedStmt.setInt(2, idade);
+			preparedStmt.setString(3, nome);
+			preparedStmt.setString(4, apelido);
+			preparedStmt.setString(5, sexo);
+			preparedStmt.setString(6, morada);
+			preparedStmt.setBlob(7, file);
+			preparedStmt.setInt(8, vencimento);
+			preparedStmt.setInt(9, nif);
+			preparedStmt.setInt(10, nif);
+			return preparedStmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return 0;
+	}
+
+	public static int updateEspecialidade(Connection con, int nif, int vencimento, String especialidade) {
+		PreparedStatement preparedStmt;
+		String query = "UPDATE Especialidade "
+				+ "SET nif = ? , idade = ?, nome = ?, apelido = ?, sexo = ?, morada = ?, image = ? " + "WHERE nif = ?";
+		try {
+			preparedStmt = con.prepareStatement(query);
+			preparedStmt.setInt(1, nif);
+			preparedStmt.setInt(2, vencimento);
+			preparedStmt.setString(3, especialidade);
 			return preparedStmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e);
@@ -136,8 +200,8 @@ public class Javatosql {
 		return 0;
 	}
 
-	public static int insertToConsulta(Connection con, int idManchaHoraria, Date data, Time hora, String especialidade,
-			int nif_utente, int nif_medico) {
+	public static int insertToConsulta(Connection con, Date data, Time hora, String especialidade, int nif_utente,
+			int nif_medico) {
 		PreparedStatement preparedStmt;
 		try {
 			preparedStmt = con.prepareStatement(consultaQuery);
@@ -146,7 +210,6 @@ public class Javatosql {
 			preparedStmt.setString(3, especialidade);
 			preparedStmt.setInt(4, nif_utente);
 			preparedStmt.setInt(5, nif_medico);
-			preparedStmt.setInt(6, idManchaHoraria);
 			return preparedStmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e);
@@ -183,50 +246,95 @@ public class Javatosql {
 		return 0;
 	}
 
-	public static int insertConsulta(Connection con, Date dia, Time hora, String nome_especialidade, int nif_utente,
-			int nif_medico) {
+	public static int insertConsulta(Connection con, Date dataConsulta, Time horaInicio, String nome_especialidade,
+			int nif_utente, int nif_medico) {
 		PreparedStatement preparedStmt;
 		try {
 			preparedStmt = con.prepareStatement(consultaQuery);
-			preparedStmt.setDate(1, dia);
-			preparedStmt.setTime(2, hora);
+			preparedStmt.setDate(1, dataConsulta);
+			preparedStmt.setTime(2, horaInicio);
 			preparedStmt.setString(3, nome_especialidade);
 			preparedStmt.setInt(4, nif_utente);
 			preparedStmt.setInt(5, nif_medico);
-			return preparedStmt.executeUpdate();
+			preparedStmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e);
 		}
-		return 0;
-	}
 
-	public static int insertFalta(Connection con, Date dia, Time horaInit, String nome_especialidade, Time horaFim,
-			int nif_utente, int nif_medico) {
-		PreparedStatement preparedStmt;
-		try {
-			preparedStmt = con.prepareStatement(faltaQuery);
-			preparedStmt.setInt(1, nif_utente);
-			preparedStmt.setInt(2, nif_medico);
-			preparedStmt.setTime(3, horaInit);
-			preparedStmt.setTime(4, horaFim);
-			preparedStmt.setDate(5, dia);
-			preparedStmt.setString(6, nome_especialidade);
-			return preparedStmt.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println(e);
+		Time horaFim = add30(horaInicio);
+
+		String pessoas = String.valueOf(nif_utente) + "-";
+
+		if (listarManchasMarcadasFim(con, dataConsulta, horaInicio)) {
+			String ab = listarManchasMarcadasPessoaFim(con, dataConsulta, horaInicio);
+
+			if (!pessoas.replace("-", "").equals(ab.replace("-", ""))) {
+				pessoas += ab;
+			}
+
+			// Trocar a hora de fim para a minha hora de fim
+			System.out.println("HORA INICIO IGUAL A HORA FIM");
+			String query = "update ManchaHorariaMarcada set horaFim = ?, pessoas = ? where dia = ? and horaFim = ?";
+			PreparedStatement preparedStmt2;
+			try {
+				preparedStmt2 = con.prepareStatement(query);
+				preparedStmt2.setTime(1, horaFim);
+				preparedStmt2.setString(2, pessoas);
+				preparedStmt2.setDate(3, dataConsulta);
+				preparedStmt2.setTime(4, horaInicio);
+				preparedStmt2.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return 1;
+		} else if (listarManchasMarcadasInicio(con, dataConsulta, horaFim)) {
+			// Trocar a hora de inicio para a minha hora de inicio
+			String query = "update ManchaHorariaMarcada set horaInicio = ? where dia = ? and horaInicio = ?";
+			PreparedStatement preparedStmt2;
+			try {
+				preparedStmt2 = con.prepareStatement(query);
+				preparedStmt2.setTime(1, horaInicio);
+				preparedStmt2.setString(2, pessoas);
+				preparedStmt2.setDate(3, dataConsulta);
+				preparedStmt2.setTime(4, horaFim);
+				preparedStmt2.executeUpdate();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return 1;
+
+		} else {
+			PreparedStatement preparedStmt1;
+			try {
+				preparedStmt1 = con.prepareStatement(novaManchaQuery);
+				preparedStmt1.setDate(1, dataConsulta);
+				preparedStmt1.setTime(2, horaInicio);
+				preparedStmt1.setTime(3, horaFim);
+				preparedStmt1.setString(4, pessoas);
+				preparedStmt1.setInt(5, nif_medico);
+				preparedStmt1.executeUpdate();
+				return 1;
+			} catch (SQLException e) {
+				System.out.println(e);
+			}
 		}
+
 		return 0;
 	}
 
-	public static int insertPresenca(Connection con, Date dia, Time horaInit, String nome_especialidade, Time horaFim,
-			int nif_utente, int nif_medico) {
+	public static int insertStatusConsulta(Connection con, Date dia, Time horaInit, String nome_especialidade,
+			int nif_utente, int nif_medico, String status) {
 		PreparedStatement preparedStmt;
+		String query = "UPDATE Consulta SET statuss = ?"
+				+ " WHERE nif_utente = ? and nif_medico = ? and horaInicio = ? and dataConsulta = ? and nome_especialidade = ?";
 		try {
-			preparedStmt = con.prepareStatement(presencaQuery);
-			preparedStmt.setInt(1, nif_utente);
-			preparedStmt.setInt(2, nif_medico);
-			preparedStmt.setTime(3, horaInit);
-			preparedStmt.setTime(4, horaFim);
+			preparedStmt = con.prepareStatement(query);
+			preparedStmt.setString(1, status);
+			preparedStmt.setInt(2, nif_utente);
+			preparedStmt.setInt(3, nif_medico);
+			preparedStmt.setTime(4, horaInit);
 			preparedStmt.setDate(5, dia);
 			preparedStmt.setString(6, nome_especialidade);
 			return preparedStmt.executeUpdate();
@@ -394,7 +502,7 @@ public class Javatosql {
 		return false;
 	}
 
-	public static String nomePessoa (Connection con, int nif) {
+	public static String nomePessoa(Connection con, int nif) {
 		try {
 			String queryCheck = "SELECT Pessoa.nome FROM Pessoa WHERE Pessoa.nif = ?";
 			PreparedStatement ps = con.prepareStatement(queryCheck);
@@ -408,30 +516,23 @@ public class Javatosql {
 		}
 		return null;
 	}
-	
-	public static byte[] getteste(Connection con) {
+
+	public static String[] getUtente(Connection con, int nif) {
 		try {
-			String queryCheck = "SELECT Pessoa.image from Pessoa WHERE nif = 321312312";
-			PreparedStatement ps = con.prepareStatement(queryCheck);
-			ResultSet rs = ps.executeQuery();
-			Blob b = null;
-			while(rs.next()) {
-				b = rs.getBlob(1);
-			}
-			return b.getBytes(1, (int) b.length());
-		} catch (SQLException e) {
-			System.out.println(e);
-		}
-		return null;
-	}
-	public static String getUtente(Connection con, int nif) {
-		try {
-			String queryCheck = "SELECT Pessoa.nome, Pessoa.apelido, Pessoa.nif from Pessoa WHERE nif = ?";
+			String queryCheck = "SELECT p.nome, p.apelido, p.idade, p.sexo, p.morada, p.image from Pessoa p WHERE nif = ?";
 			PreparedStatement ps = con.prepareStatement(queryCheck);
 			ps.setInt(1, nif);
-			ResultSet resultSet = ps.executeQuery();
-			List<Sqltojava> list = Sqltojava.formTable(resultSet);
-			return Sqltojava.getList(con, list);
+			ResultSet rs = ps.executeQuery();
+			List<String> list = new ArrayList<String>();
+			while (rs.next()) {
+				Blob b = rs.getBlob(6);
+				if (b != null) {
+					String blob = utils.Base64Converter(b.getBytes(1, (int) b.length()));
+					list.add(rs.getString(1) + " " + rs.getString(2) + "=" + rs.getInt(3) + "=" + rs.getString(4) + "="
+							+ rs.getString(5) + "=" + blob);
+				}
+			}
+			return list.toArray(new String[list.size()]);
 		} catch (SQLException e) {
 			System.out.println(e);
 		}
@@ -440,8 +541,7 @@ public class Javatosql {
 
 	public static int getIDconsulta(Connection con, Date data, Time hora, String nome_especialidade, int nif_medico) {
 		String queryCheck = "SELECT Consulta.idConsulta FROM Consulta WHERE dataConsulta = ?" + "AND "
-				+ "horaInicio = ?"
-				+ "AND nome_especialidade = ?" + "AND nif_medico = ?";
+				+ "horaInicio = ?" + "AND nome_especialidade = ?" + "AND nif_medico = ?";
 		try {
 			PreparedStatement ps = con.prepareStatement(queryCheck);
 			ps.setDate(1, data);
@@ -485,19 +585,45 @@ public class Javatosql {
 
 	public static String[] listarConsultas(Connection con, int nif) {
 		try {
-			String queryCheck = "SELECT Consulta.dataConsulta, Consulta.horaInicio, Consulta.nif_medico, Consulta.nome_especialidade from Consulta WHERE nif_utente = ?";
+			String queryCheck = "SELECT Consulta.dataConsulta, Consulta.horaInicio, Consulta.nif_medico, "
+					+ "Consulta.nome_especialidade from Consulta WHERE nif_utente = ?";
 			PreparedStatement ps = con.prepareStatement(queryCheck);
 			ps.setInt(1, nif);
-			ResultSet resultSet = ps.executeQuery();
-			List<Sqltojava> list = Sqltojava.formTable(resultSet);
-			String s = Sqltojava.getList(con, list);
-			return s.split("\n");
+			ResultSet rs = ps.executeQuery();
+			List<String> list = new ArrayList<String>();
+			while (rs.next()) {
+				list.add(rs.getDate(1) + "=" + rs.getTime(2) + "=" + rs.getInt(3) + "=" + rs.getString(4));
+			}
+			return list.toArray(new String[list.size()]);
 		} catch (SQLException e) {
 			System.out.println(e);
 		}
 		return null;
 	}
 
+	public static String[] procurarMedicos(Connection con) {
+		try {
+			String query = "SELECT m.nif,m.nome,m.apelido,m.idade,m.sexo,m.morada"
+					+ ",u.vencimento,u.nome_especialidade,m.image"
+					+ " from Pessoa m CROSS JOIN Medico u ON m.nif = u.nif";
+			PreparedStatement ps = con.prepareStatement(query);
+			ResultSet rs = ps.executeQuery();
+			List<String> list = new ArrayList<String>();
+			while (rs.next()) {
+				Blob b = rs.getBlob(9);
+				if (b != null) {
+					String blob = utils.Base64Converter(b.getBytes(1, (int) b.length()));
+					list.add(rs.getInt(1) + "=" + rs.getString(2) + " " + rs.getString(3) + "=" + rs.getInt(4) + "="
+							+ rs.getString(5) + "=" + rs.getString(6) + "=" + rs.getInt(7) + "=" + rs.getString(8) + "="
+							+ blob);
+				}
+			}
+			return list.toArray(new String[list.size()]);
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return null;
+	}
 
 	public static String[] listarMedicosbyEsp(Connection con, String nome_especialidade) {
 		try {
@@ -509,8 +635,8 @@ public class Javatosql {
 			ps.setString(1, nome_especialidade);
 			ResultSet resultSet = ps.executeQuery();
 			while (resultSet.next()) {
-				list.add(resultSet.getString(1) + " " + resultSet.getString(2) + "=" + resultSet.getInt(3)
-				+"=" + resultSet.getInt(4));
+				list.add(resultSet.getString(1) + " " + resultSet.getString(2) + "=" + resultSet.getInt(3) + "="
+						+ resultSet.getInt(4));
 			}
 			return list.toArray(new String[list.size()]);
 		} catch (SQLException e) {
@@ -642,6 +768,7 @@ public class Javatosql {
 		}
 		return null;
 	}
+
 	public static String[] listarUtenteNome(Connection con) {
 		try {
 			String query = "SELECT Pessoa.nome,Pessoa.apelido"
@@ -649,7 +776,7 @@ public class Javatosql {
 			PreparedStatement ps = con.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			List<String> list = new ArrayList<String>();
-			while(rs.next()) {
+			while (rs.next()) {
 				list.add(rs.getString(1) + " " + rs.getString(2));
 			}
 			return list.toArray(new String[list.size()]);
@@ -658,19 +785,21 @@ public class Javatosql {
 		}
 		return null;
 	}
+
 	public static String[] procurarUtentes(Connection con) {
 		try {
 			String query = "SELECT Pessoa.nif,Pessoa.nome,Pessoa.apelido,Pessoa.idade,Pessoa.sexo,Pessoa.morada"
-					+ ",Pessoa.image"
-					+ " from Pessoa RIGHT JOIN Utente ON Pessoa.nif = Utente.nif";
+					+ ",Pessoa.image" + " from Pessoa RIGHT JOIN Utente ON Pessoa.nif = Utente.nif";
 			PreparedStatement ps = con.prepareStatement(query);
 			ResultSet rs = ps.executeQuery();
 			List<String> list = new ArrayList<String>();
-			while(rs.next()) {
+			while (rs.next()) {
 				Blob b = rs.getBlob(7);
-				String blob = utils.Base64Converter(b.getBytes(1, (int) b.length()));
-				list.add(rs.getInt(1) + "=" + rs.getString(2) + " " + rs.getString(3) + "="+ rs.getInt(4) + "=" 
-				+ rs.getString(5) + "=" + rs.getString(6) + "=" + blob);
+				if (b != null) {
+					String blob = utils.Base64Converter(b.getBytes(1, (int) b.length()));
+					list.add(rs.getInt(1) + "=" + rs.getString(2) + " " + rs.getString(3) + "=" + rs.getInt(4) + "="
+							+ rs.getString(5) + "=" + rs.getString(6) + "=" + blob);
+				}
 			}
 			return list.toArray(new String[list.size()]);
 		} catch (SQLException e) {
@@ -763,23 +892,216 @@ public class Javatosql {
 		}
 		return -1;
 	}
-//	public static boolean checkConsulta(Connection con, int nif) {
-//
-//		try {
-//			String queryCheck = "SELECT * from Utente WHERE nif = ?";
-//			PreparedStatement ps = con.prepareStatement(queryCheck);
-//			ps.setInt(1, nif);
-//			ResultSet resultSet = ps.executeQuery();
-//			return resultSet.next();
-//		} catch (SQLException e) {
-//			System.out.println(e);
-//		}
-//		return false;
-//	}
-//	
 
+	public static boolean listarManchasMarcadasFim(Connection con, Date data, Time fim) {
+		try {
+			String query = "SELECT ManchaHorariaMarcada.horaFim FROM ManchaHorariaMarcada WHERE horaFim = ? AND dia = ?";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setTime(1, fim);
+			ps.setDate(2, data);
+			ResultSet resultSet = ps.executeQuery();
+			List<Sqltojava> list = Sqltojava.formTable(resultSet);
+			String s = Sqltojava.getList(con, list);
+			boolean aav = !s.trim().equals("");
+			return aav;
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return false;
+	}
 
+	public static String[] listarManchasMarcadasPessoas(Connection con, Date data, Time horaI) {
+		try {
+			String query = "SELECT ManchaHorariaMarcada.pessoas FROM ManchaHorariaMarcada WHERE dia = ? AND horaInicio = ?";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setDate(1, data);
+			ps.setTime(2, horaI);
+			ResultSet resultSet = ps.executeQuery();
+			List<Sqltojava> list = Sqltojava.formTable(resultSet);
+			String s = Sqltojava.getList(con, list);
+			return s.trim().split("-");
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return null;
+	}
 
+	public static String[] listarManchasMarcadasHoras(Connection con, Date data) {
+		try {
+			String query = "SELECT ManchaHorariaMarcada.horaInicio FROM ManchaHorariaMarcada WHERE dia = ?";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setDate(1, data);
+			ResultSet resultSet = ps.executeQuery();
+			List<Sqltojava> list = Sqltojava.formTable(resultSet);
+			String s = Sqltojava.getList(con, list);
+			return s.trim().split(" ");
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return null;
+	}
 
+	public static String listarManchasMarcadasPessoaFim(Connection con, Date data, Time fim) {
+		try {
+			String query = "SELECT ManchaHorariaMarcada.pessoas FROM ManchaHorariaMarcada WHERE horaFim = ? AND dia = ?";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setTime(1, fim);
+			ps.setDate(2, data);
+			ResultSet resultSet = ps.executeQuery();
+			List<Sqltojava> list = Sqltojava.formTable(resultSet);
+			String s = Sqltojava.getList(con, list);
+			return s;
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return null;
+	}
 
+	public static String listarManchasMarcadasPessoaInicio(Connection con, Date data, Time fim) {
+		try {
+			String query = "SELECT ManchaHorariaMarcada.pessoas FROM ManchaHorariaMarcada WHERE horaInicio = ? AND dia = ?";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setTime(1, fim);
+			ps.setDate(2, data);
+			ResultSet resultSet = ps.executeQuery();
+			List<Sqltojava> list = Sqltojava.formTable(resultSet);
+			String s = Sqltojava.getList(con, list);
+			return s;
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return null;
+	}
+
+	public static boolean listarManchasMarcadasInicio(Connection con, Date data, Time fim) {
+		try {
+			String query = "SELECT ManchaHorariaMarcada.horaInicio FROM ManchaHorariaMarcada WHERE horaInicio = ? AND dia = ?";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setTime(1, fim);
+			ps.setDate(2, data);
+			ResultSet resultSet = ps.executeQuery();
+			List<Sqltojava> list = Sqltojava.formTable(resultSet);
+			String s = Sqltojava.getList(con, list);
+			boolean aav = !s.trim().equals("");
+			return aav;
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return false;
+	}
+
+	public static String[] listarDatasMedico(Connection con, int nif) {
+		try {
+			String queryCheck = "SELECT Consulta.dataConsulta from Consulta WHERE nif_medico = ?";
+			PreparedStatement ps = con.prepareStatement(queryCheck);
+			ps.setInt(1, nif);
+			ResultSet resultSet = ps.executeQuery();
+			List<Sqltojava> list = Sqltojava.formTable(resultSet);
+			String s = Sqltojava.getList(con, list);
+			return s.split("\n");
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return null;
+
+	}
+
+	public static Time add30(Time h1) {
+
+		String[] hora = h1.toString().split(":");
+
+		if (hora[1].equals("30")) {
+			int h = Integer.parseInt(hora[0]) + 1;
+			hora[0] = String.valueOf(h);
+			hora[1] = "00";
+		} else if (hora[1].equals("00")) {
+			hora[1] = "30";
+		}
+
+		return timeFormater(hora[0], hora[1]);
+	}
+
+	public static Time remove30(Time h1) {
+
+		String[] hora = h1.toString().split(":");
+
+		if (hora[1].equals("30")) {
+			hora[1] = "00";
+		} else if (hora[1].equals("00")) {
+			int h = Integer.parseInt(hora[0]) - 1;
+			hora[0] = String.valueOf(h);
+			hora[1] = "30";
+		}
+
+		return timeFormater(hora[0], hora[1]);
+	}
+	
+	public static String[] listarManchasHorarias (Connection con, int nif_medico) {
+		try {
+			String query = "SELECT Manchahoraria.idManchaHoraria, ManchaHoraria.dia, ManchaHoraria.horaInicio, ManchaHoraria.horaFim"
+					+ " FROM ManchaHoraria WHERE nif_medico = ?";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setInt(1, nif_medico);
+			ResultSet resultSet = ps.executeQuery();
+			List<Sqltojava> list = Sqltojava.formTable(resultSet);
+			String s = Sqltojava.getList(con, list);
+			return s.trim().split(" ");
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return null;
+	}
+	
+	public static boolean atualizarMancha (Connection con, Date dia, Time horaInicio, int nif_medico) {
+		try {
+			String query = "UPDATE Manchahoraria  SET dia = ?"
+					+ " WHERE nif_medico = ? AND horaInicio = ?";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setDate(1, dia);
+			ps.setInt(2, nif_medico);
+			ps.setTime(3, horaInicio);
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return false;
+	}
+	
+	public static boolean atualizarMancha (Connection con, Time horaInicioNew, Date data, int nif_medico) {
+		try {
+			String query = "UPDATE Manchahoraria  SET horaInicio = ?, horaFim = ?"
+					+ " WHERE nif_medico = ? AND dia = ?";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setTime(1, horaInicioNew);
+			ps.setTime(2, Javatosql.add30(horaInicioNew));
+			ps.setInt(3, nif_medico);
+			ps.setDate(4, data);
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return false;
+	}
+
+	public static String[] listarStatusConsulta(Connection con, int nif_medico) {
+		try {
+			String query = "SELECT p.nif, p.nome,p.apelido,s.dataConsulta,s.horaInicio,s.nome_especialidade,s.statuss FROM "
+					+ "Consulta s INNER JOIN Pessoa p ON s.nif_utente = p.nif " + "WHERE s.nif_medico = ?"
+					+ " ORDER BY s.dataConsulta DESC";
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setInt(1, nif_medico);
+			ResultSet rs = ps.executeQuery();
+			List<String> list = new ArrayList<String>();
+			while (rs.next()) {
+				list.add(rs.getInt(1) + "=" + rs.getString(2) + " " + rs.getString(3) + "=" + rs.getDate(4) + "="
+						+ rs.getTime(5) + "=" + rs.getString(6) + "=" + rs.getString(7));
+			}
+			return list.toArray(new String[list.size()]);
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		return null;
+	}
 }

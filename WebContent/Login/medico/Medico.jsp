@@ -1,20 +1,25 @@
-<%@ page import="java.util.List"
-import="Main.Login"
-import="java.sql.Connection"
-import="java.sql.DriverManager"
-import="java.sql.PreparedStatement"
-import="java.sql.SQLException"
-import="java.sql.*"
+<%@ page import="java.util.List" import="Main.Login"
+	import="java.sql.Connection" import="java.sql.DriverManager"
+	import="java.sql.PreparedStatement" import="java.sql.SQLException"
+	import="java.sql.*" import="medico.Medico" import="utils.Javatosql"%>
+
+<%
+	String n = (String) session.getAttribute("nif");
+	int nif = Integer.parseInt(n);
+	Medico medico = new Medico(nif);
+	session.setAttribute("medico", medico);
 %>
-<% Login l = new Login();%>
+
 <!DOCTYPE html>
-<html lang="en">
+
+
+<html>
 <head>
 <title>ISEL Clinic</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->
-<link rel="icon" type="image/png" href="images/icons/favicon.ico" />
+<link rel="icon" type="image/png" href="../images/icons/favicon.ico" />
 <!--===============================================================================================-->
 <link rel="stylesheet" type="text/css"
 	href="vendor/bootstrap/css/bootstrap.min.css">
@@ -39,56 +44,62 @@ import="java.sql.*"
 <link rel="stylesheet" type="text/css"
 	href="vendor/daterangepicker/daterangepicker.css">
 <!--===============================================================================================-->
-<link rel="stylesheet" type="text/css" href="css/util.css">
-<link rel="stylesheet" type="text/css" href="css/main.css">
+<link rel="stylesheet" type="text/css" href="../css/util.css">
+<link rel="stylesheet" type="text/css" href="../css/main.css">
 <!--===============================================================================================-->
 </head>
-<body style="background-image: url('images/back.jpg');">
+
+<body style="background-image: url('../images/back.jpg');">
 
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100 p-t-85 p-b-20">
-				<form class="login100-form validate-form">
-					<span class="login100-form-title p-b-70"> ISEL Care </span> <span
-						class="login100-form-avatar"> <img
-						src="images/avatar-01.jpg" alt="AVATAR">
-					</span>
-
-					<div class="wrap-input100 validate-input m-t-85 m-b-35"
-						data-validate="Enter username">
-						<input class="input100" type="text" name="username"> <span
-							class="focus-input100" data-placeholder="Nif"></span>
-					</div>
-
-
+				<%
+					String gender = "";
+					if (medico.getGender().equalsIgnoreCase("m")) {
+						gender = "o";
+					} else {
+						gender = "a";
+					}
+				%>
+				<%
+					String name = medico.getNome();
+				%>
+				<span class="login100-form-title p-b-70"> Bem-vind<%=gender%>
+					Doutor<%
+					if (gender.equalsIgnoreCase("a")) {
+						out.print(gender);
+					}
+				%> <%=name%> <br> <br>
 					<div class="container-login100-form-btn">
-						<button class="login100-form-btn" name="login" id="lg">
-							Entrar</button>
+						<img height="200" width="150"
+							src="data:image/png;base64,<%=medico.getMedicoImagem()%>"
+							alt="Foto de Perfil" />
 					</div>
-
+				</span>
+				<form id="formEsp" method="POST" action="listarUtentes.jsp">
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn" name="listarUtentes">
+							Listar Utentes</button>
+					</div>
 				</form>
+				<form id="formEsp" method="POST" action="ListarConsultas.jsp">
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn" name="listarConsulta">
+							Manipular Consultas Marcadas</button>
+					</div>
+				</form>
+
+				<form id="formEsp" method="POST" action="MarcarFaltaPresenca.jsp">
+					<button class="login100-form-btn" name="gerirUtente">Marcar
+						Falta/Presença</button>
+				</form>
+
 			</div>
 		</div>
 	</div>
 
-	<%
-		String entrarBtn = request.getParameter("login");
-		if (entrarBtn != null) {
-			String ajuda = request.getParameter("username");
-			int nif = Integer.parseInt(ajuda);
-			session.setAttribute("nif", String.valueOf(nif));
-			String permissao = l.Entrar(nif);
-			if (permissao != null) {
-				response.sendRedirect(permissao);
-			} else {%>
-			
-			<script>alert("NIF/Palavra-passe invalido(s)");</script>
-			
-			<%
-			}
-		}
-		
-	%>
-
 </body>
+
+
 </html>

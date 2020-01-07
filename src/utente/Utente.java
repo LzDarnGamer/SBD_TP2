@@ -91,6 +91,10 @@ public class Utente {
 
 	}
 	
+	public String getUtenteImagem() {
+		return Javatosql.getUtente(con, nif)[0].split("=")[4];
+	}
+	
 	public Connection getCon() {
 		return con;
 	}

@@ -30,10 +30,32 @@ public class Admin {
 	public void createMedico(int nif, String sexo, int idade, String nome, String apelido, String morada,
 			int vencimento, String especialidade, InputStream image) {
 		if (Javatosql.insertToPessoa(con, nif, idade, sexo, nome, apelido, morada, image) == 1) {
+			if(!Javatosql.checkEspecialidade(con, especialidade))
+				Javatosql.insertToEspecialidade(con, especialidade);
 			Javatosql.insertToMedico(con, nif, vencimento, especialidade);
 		}
-
 	}
+	
+	public void updateMedico(int nif, String sexo, int idade, String nome, String apelido, String morada, 
+			String file, int vencimento, String especialidade) {
+		String esp = Javatosql.getEspecialidade(con, nif);
+		Javatosql.removeEspecialidade(con, esp);
+		Javatosql.insertToEspecialidade(con, especialidade);
+		Javatosql.updateMedico(con, nif, sexo, idade, nome, apelido, morada, utils.Base64Decoder(file), vencimento);
+	}
+	
+	public void updateMedico(int nif, String sexo, int idade, String nome, String apelido, String morada, 
+			InputStream file, int vencimento, String especialidade) {
+		String esp = Javatosql.getEspecialidade(con, nif);
+		Javatosql.removeEspecialidade(con, esp);
+		Javatosql.insertToEspecialidade(con, especialidade);
+		Javatosql.updateMedico(con, nif, sexo, idade, nome, apelido, morada, file, vencimento);
+	}
+	
+	
+	
+	
+	
 	
 	public void createUtente(int nif, String sexo, int idade, String nome, String apelido, String morada, 
 			InputStream image) {
@@ -51,6 +73,48 @@ public class Admin {
 		Javatosql.updateUtente(con, nif, sexo, idade, nome, apelido, morada, file);
 	}
 
+	
+	public void deleteUtente(int nif) {
+		Javatosql.removeUtente(con, nif);
+		Javatosql.removePessoa(con, nif);
+	}
+	
+	public void deleteMedico(int nif) {
+		String esp = Javatosql.getEspecialidade(con, nif);
+		Javatosql.removeMedico(con, nif);
+		Javatosql.removePessoa(con, nif);
+		Javatosql.removeEspecialidade(con, esp);
+	}
+	
+	public void importarUtente(String path) {
+		
+		String[] dados = utils.importarUtente(path);
+		String[] d = dados[0].split("=");
+		Javatosql.insertToPessoa(con, Integer.parseInt(d[0]), Integer.parseInt(d[1]), d[2], d[3],
+				d[4], d[5], utils.Str2InputStream(d[6]));
+		Javatosql.insertToUtente(con, Integer.parseInt(d[0]));
+		
+		for (int i = 1; i < dados.length; i++) {
+			String[] temp = dados[i].split("=");
+			Javatosql.insertToConsulta(con, utils.dateFormater(temp[0]),
+					Javatosql.timeFormater(temp[1]), temp[3], Integer.parseInt(temp[4]), 
+					Integer.parseInt(temp[5]));
+		}
+		
+		
+	}
+	
+	public void exportarUtente(int nif) {
+		String[] dados = Javatosql.getUtente(con, nif);
+		
+		String[] tempString = dados[0].split("=");
+		
+		String[] consultas = Javatosql.listarConsultas(con, nif);
+		
+ 		utils.exportarUtente(nif, tempString[0], Integer.parseInt(tempString[1]), tempString[2], 
+				tempString[3], tempString[4], consultas);
+	}
+	
 	public String[] listarUtenteNome() {
 
 		return Javatosql.listarUtenteNome(con);
@@ -59,7 +123,9 @@ public class Admin {
 		return Javatosql.procurarUtentes(con);
 	}
 	
-	
+	public String[] listarMedicos() {
+		return Javatosql.procurarMedicos(con);
+	}
 
 	public String[] listarMedicos(String nome_especialidade) {
 		return Javatosql.listarMedicosbyEsp(con, nome_especialidade);

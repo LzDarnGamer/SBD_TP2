@@ -41,12 +41,8 @@
 					<button class="login100-form-btn" name="listarUtentesAutoComplete">Procurar fichas de utentes</button>
 				</form>
 				<br>
-				<form id="formEsp" method="POST">
-					<button class="login100-form-btn" name="OKesp">Gerir Medico</button>
-				</form>
-				<br>
-				<form id="formEsp" method="POST">
-					<button class="login100-form-btn" name="OKesp">Exportar/Importar fichas</button>
+				<form id="formEsp" method="POST" action="criar_Utente/Admin_Medico.jsp">
+					<button class="login100-form-btn" name="gerirMedico">Gerir Medico</button>
 				</form>
 				<br>
 				<form id="formEsp" method="POST" action="ListarEspecialidades.jsp">
@@ -67,27 +63,5 @@
 			</div>
 		</div>
 	</div>
-
-
-
-	<div id="dropDownSelect1"></div>
-
-	<!--===============================================================================================-->
-	<script src="../vendor/jquery/jquery-3.2.1.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="../vendor/animsition/js/animsition.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="../vendor/bootstrap/js/popper.js"></script>
-	<script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="../vendor/select2/select2.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="../vendor/daterangepicker/moment.min.js"></script>
-	<script src="../vendor/daterangepicker/daterangepicker.js"></script>
-	<!--===============================================================================================-->
-	<script src="../vendor/countdowntime/countdowntime.js"></script>
-	<!--===============================================================================================-->
-	<script src="../js/main.js"></script>
-
 </body>
 </html>
